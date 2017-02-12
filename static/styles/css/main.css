@@ -1,0 +1,39 @@
+/* 
+	Main LESS file
+	Overwriting the default Bootstrap styles
+*/
+.navbar {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+}
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+.navbar .navbar-collapse {
+  text-align: center;
+  width: 100%;
+}
+.navbar-default {
+  background-color: transparent;
+  border: 0px;
+}
+.navbar-default .navbar-nav li a {
+  color: #fff;
+  text-transform: uppercase;
+}
+.navbar-default .navbar-nav li .active {
+  background-color: transparent;
+}
+.page-header {
+  margin: 0px;
+  padding: 30px;
+  background-image: url('../../images/header.jpg');
+  background-size: cover;
+  height: 350px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 1px 1px #000;
+}

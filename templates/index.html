@@ -3,6 +3,7 @@
 	<head>
 		<script type="text/javascript">
 			window.layoutType = JSON.parse('{{layout|tojson}}');
+			console.log(window.layoutType)
 		</script>
 		<script src="static/bower_components/angular/angular.js"></script>
 		<script src="static/bower_components/angular-route/angular-route.js"></script>
@@ -13,7 +14,7 @@
 		<link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.css" />
 		<link rel="stylesheet" href="static/styles/css/main.css" />  		
 	</head>
-	<body ng-app="app" class="dark">
+	<body ng-app="app" class="{{ layout.colourScheme }}">
 
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default">

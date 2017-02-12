@@ -45,6 +45,8 @@
 	text-shadow: 1px 1px #000;
 }
 
+/* Layout variations */
+
 #main {
 	padding: 30px 0px;
 	width: 70%;
@@ -82,12 +84,25 @@
 	}
 }
 
-/*.dark {
-	background-color: #47494c;
-	#main {
-		color: #fff;
+/* Colour scheme variations */
+
+.dark {
+	background-color: #474747;
+	.page-header {
+		border-color: #0c0c0c;
 	}
-}*/
+	#main {
+		.thumbnail {
+			background-color: #0c0c0c;
+			border-color: #0c0c0c;
+			h3, p {
+				color: #fff;
+			}
+		}
+	}
+}
+
+/* Text size variations */
 
 h3 {
 	&.large {

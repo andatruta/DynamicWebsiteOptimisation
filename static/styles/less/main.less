@@ -44,3 +44,40 @@
 	text-align: center;
 	text-shadow: 1px 1px #000;
 }
+
+#main {
+	padding: 30px 0px;
+	width: 70%;
+	margin: 0 auto;
+	&.grid {
+		.container {
+			width: 48%;
+			display: inline-block;
+			.thumbnail {
+				img {
+					margin-top: 25px;
+				}
+			}
+		}
+	}
+	&.list {
+		.container {
+			width: 100%;
+			.thumbnail {
+				display: inline-block;
+				img {
+					float: left;
+					width: 40%;
+				}
+				.caption {
+					float: right;
+					width: 55%;
+				}
+			}
+			.thumbnail:after {
+				clear: both;
+				display: block;
+			}
+		}
+	}
+}

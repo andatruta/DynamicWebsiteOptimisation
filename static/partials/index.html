@@ -1,12 +1,14 @@
 <!-- Main -->
-<div id="main" class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img src="static/images/pic01.jpg" alt="...">
-      <div class="caption">
-        <h3>Blog post title</h3>
-        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        <p><a href="#" class="btn btn-primary" role="button">Read more</a>
-      </div>
-    </div>
-  </div>
+<div id="main" class="grid">
+	<!-- <div class="col-sm-12 col-md-12" ng-repeat="post in ctrl.posts"> -->
+	<div class="container" ng-repeat="post in ctrl.posts">
+	    <div class="thumbnail">
+			<img src="{{ post.thumbnail }}" alt="..." />
+			<div class="caption">
+				<h3>{{ post.title }}</h3>
+				<p>{{ post.descr }}</p>
+				<p><a href="#" class="btn btn-primary" role="button">Read more</a></p>
+			</div>
+		</div>
+	</div>
 </div>

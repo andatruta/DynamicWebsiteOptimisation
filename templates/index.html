@@ -3,10 +3,11 @@
 	<head>
 		<script type="text/javascript">
 			window.layoutType = JSON.parse('{{layout|tojson}}');
-			console.log(window.layoutType)
+			console.log(window.layoutType);
 		</script>
 		<script src="static/bower_components/angular/angular.js"></script>
 		<script src="static/bower_components/angular-route/angular-route.js"></script>
+		<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="static/js/app.js"></script>
 		<script src="static/js/controllers/index.controller.js"></script>
 		<script src="static/js/controllers/about.controller.js"></script>
@@ -48,4 +49,20 @@
 		<!-- NG-VIEW -->
 		<div ng-view></div>
 	</body>
+
+	<script type="text/javascript">
+		window.onbeforeunload = function(e) {
+				$.ajax({
+	                method: 'POST',
+	                url: '/registerSession',
+	                async: false
+	            }).then(function(response) {
+	            	console.log(response)
+	            }, function(error) {
+	                console.log(error);
+	            });
+
+	            // return 'Are you sure?'
+			};		
+	</script>
 </html>

@@ -33,4 +33,15 @@ angular.module('app').controller('indexController', ['$scope', '$rootScope', '$h
 		}
 	];
 
+	ctrl.registerClick = function() {
+		$http({
+                method: 'POST',
+                url: '/registerClick'
+            }).then(function(response) {
+            	console.log(response)
+            }, function(error) {
+                console.log(error);
+            });
+	};
+
 }]);

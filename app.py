@@ -4,8 +4,8 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import random as rand
 from itertools import product
-import json
-import os
+import json, os
+from EpsilonGreedy import EpsilonGreedy
 
 # Create app and PyMongo DB
 app = Flask(__name__)
@@ -51,12 +51,15 @@ def generate_layout():
 	layouts = ["grid", "list"]
 	font_sizes = ["small", "large"]
 	colour_schemes = ["dark", "light"]
-	versions = list(product(layouts, font_sizes, colour_schemes))
-	choice = versions[rand.randint(0, len(versions) - 1)]
-	choice = {'layout': choice[0], 'fontSize': choice[1], 'colourScheme': choice[2]}
-	session['layoutType'] = choice
+	features = [layouts, font_sizes, colour_schemes]
+	bandit = EpsilonGreedy(0.1, features)
+	# versions = list(product(layouts, font_sizes, colour_schemes))
+	# choice = versions[rand.randint(0, len(versions) - 1)]
+	# choice = {'layout': choice[0], 'fontSize': choice[1], 'colourScheme': choice[2]}
+	session['layoutType'] = bandit.getVersion()
 	session['clicks'] = 0
-	return choice
+	print "layout type: ", session['layoutType']
+	return session['layoutType']
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', debug=True)

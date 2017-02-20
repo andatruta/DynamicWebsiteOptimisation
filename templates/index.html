@@ -49,20 +49,4 @@
 		<!-- NG-VIEW -->
 		<div ng-view></div>
 	</body>
-
-	<script type="text/javascript">
-		window.onbeforeunload = function(e) {
-				$.ajax({
-	                method: 'POST',
-	                url: '/registerSession',
-	                async: false
-	            }).then(function(response) {
-	            	console.log(response)
-	            }, function(error) {
-	                console.log(error);
-	            });
-
-	            // return 'Are you sure?'
-			};		
-	</script>
 </html>

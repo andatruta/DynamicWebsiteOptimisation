@@ -26,7 +26,6 @@ class EpsilonGreedy():
 	def getActionValues(self):
 		values = [0.0 for version in self.versions]
 		for i, version in enumerate(self.versions):
-			# layout_type = {"layout": version[0], "font_size": version[1], "colour_scheme": version[2]}
 			q_a = db.Clicks.find({"$and": [{"layout": version[0]}, {"font_size": version[1]}, {"colour_scheme": version[2]}]})
 			reward = 0.0
 			# sum up rewards from all of the times the version was shown
@@ -46,7 +45,7 @@ class EpsilonGreedy():
 			return self.greedyAction()
 		else:
 			print "random action"
-			return rand.randint(0, len(self.actionValues))
+			return rand.randint(0, len(self.actionValues) - 1)
 
 	def getVersion(self):
 		v = self.chooseArm()

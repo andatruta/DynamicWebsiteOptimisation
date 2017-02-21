@@ -1,13 +1,17 @@
 var casper = require('casper').create();
 
+if (casper.cli.has(0)) {
+	var clicks = parseInt(casper.cli.get(0));
+};
+
 casper.start('http://localhost:5000/#!/', function() {
 	this.echo('hello');
 });
 
 casper.then(function() {
-	var i = 1;
+	var i = 0;
 
-	this.repeat(4, function() {
+	this.repeat(clicks, function() {
 	    this.click('.read-more', function() {
 	    	this.echo("clicked");
 	    	if (this.visible('.post-container')) {

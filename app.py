@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, send_file, jsonify, session
 from flask_socketio import SocketIO, emit
 from flask_pymongo import PyMongo
+from flask_uuid import FlaskUUID
+from uuid import uuid4
 from pymongo import MongoClient
 import random as rand
 from itertools import product
@@ -10,6 +12,8 @@ from EpsilonGreedy import EpsilonGreedy
 # Create app and PyMongo DB
 app = Flask(__name__)
 socketio = SocketIO(app)
+flask_uuid = FlaskUUID()
+flask_uuid.init_app(app)
 
 # Set MongoDB details
 client = MongoClient('localhost:27017')
@@ -20,6 +24,7 @@ app.secret_key = os.urandom(24)
 
 @app.route("/")
 def index():
+	session['uid'] = uuid4()
 	return render_template('index.html', layout=generate_layout())
 
 @app.route("/registerClick", methods=['POST'])
@@ -28,7 +33,7 @@ def registerClick():
 		session['clicks'] += 1
 		print 'clicks: ', session['clicks']
 		# Update MongoDB entry
-		db.ProductData.update_one({'_id': session['_id']},{'$set': {'clicks': session['clicks']}}, upsert=False)
+		db.Clicks.update_one({'session_id': session['uid']},{'$set': {'clicks': session['clicks']}}, upsert=False)
 		return jsonify(status='OK',message='Incremented clicks successfully')
 
 	except Exception,e:
@@ -49,8 +54,8 @@ def generate_layout():
 	colour_scheme = session['layoutType'].get('colourScheme')
 	font_size = session['layoutType'].get('fontSize')
 	# Register session to DB
-	session['_id'] = str(db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0}).inserted_id)
-	print "layout type: ", session['layoutType'], session['clicks']
+	db.Clicks.insert_one({'session_id': session['uid'], 'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
+	print "layout type: ", session['layoutType'], session['uid']
 	return session['layoutType']
 
 if __name__ == "__main__":

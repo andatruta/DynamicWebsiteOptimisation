@@ -11,7 +11,7 @@ class EpsilonGreedy():
 	def __init__(self, epsilon, features):
 		self.epsilon = epsilon
 		self.versions = list(product(features[0], features[1], features[2]))
-		print "versions: ", self.versions
+		# print "versions: ", self.versions
 		self.counts = self.getCounts()
 		self.actionValues = self.getActionValues()
 
@@ -50,46 +50,3 @@ class EpsilonGreedy():
 	def getVersion(self):
 		v = self.chooseArm()
 		return {"layout": self.versions[v][0], "fontSize": self.versions[v][1], "colourScheme": self.versions[v][2]}
-
-# # Global vars
-# layouts = ["grid", "list"]
-# font_sizes = ["small", "large"]
-# colour_schemes = ["dark", "light"]
-# versions = list(product(layouts, font_sizes, colour_schemes))
-# epsilon = 0.1
-# features = [layouts, font_sizes, colour_schemes]
-
-# bandit = EpsilonGreedy(epsilon, features)
-# print bandit.chooseArm()
-
-# actions = []
-
-# for version in versions:
-# 	layout_type = {"layout": version[0], "font_size": version[1], "colour_scheme": version[2]}
-# 	q_a = db.Clicks.find({"$and": [{"layout": version[0]}, {"font_size": version[1]}, {"colour_scheme": version[2]}]})
-# 	k_a = q_a.count()
-# 	if k_a == 0:
-# 		k_a = 1
-# 	reward = 0.0
-# 	for a in q_a:
-# 		reward += a.get("clicks")
-# 	actions.append({"layout_type": layout_type, "Q_a": (reward/k_a)})
-
-# print [action for action in actions]
-
-# # select best action using E-greedy action selection method
-# # select greedy action
-# a = actions[0]
-# if rand.random() < 1 - epsilon:
-# 	a_star = -1.0
-# 	for action in actions:
-# 		if action.get("Q_a") > a_star:
-# 			a_star = action.get("Q_a")
-# 			a = action
-# else:
-# 	r = rand.randint(0, len(actions))
-# 	a = actions[r]
-
-# print a
-
-

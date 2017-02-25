@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import matplotlib.pyplot as plt
 from EpsilonGreedy import EpsilonGreedy
 from AnnealedEpsilonGreedy import AnnealedEpsilonGreedy
+from Softmax import Softmax
 
 class User:
 	def __init__(self):
@@ -27,10 +28,11 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 200
-simulations = 100
+horizon = 50
+simulations = 250
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1, 0.2, 0.3, 0.4]
+algos = ["standard", "softmax"]
 
 # Website variables
 layouts = ["grid", "list"]
@@ -43,13 +45,16 @@ features = [layouts, font_sizes, colour_schemes]
 # open file
 file = open("simulation.txt", "w")
 
-for e in epsilon:
+for algo in algos:
 	# initialise all possible versions into DB
 	versions = list(product(features[0], features[1], features[2]))
 	for v in versions:
 		db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0})
-	print "epsilon: ", e
-	bandit = EpsilonGreedy(e, features)
+	print "algo: ", algo
+	if algo == "standard":
+		bandit = EpsilonGreedy(0.1, features)
+	elif algo == "softmax":
+		bandit = Softmax(0.1, features)
 
 	for i in range(simulations):
 		reward_sum = 0.0
@@ -109,6 +114,7 @@ for e in epsilon:
 		results += str(r)
 		results += " "
 	file.write(results + "\n")
+	print "overall avg reward: ",  float(sum(avg_rewards)) / float(simulations)
 
 	# clear DB for next epsilon simulation
 	db.Clicks.drop()

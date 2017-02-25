@@ -7,9 +7,10 @@ def plotResults(simulations, horizon, sim_file):
 			# percentages = reduce_list(percentages, 10)
 			plt.plot([i for i in range(simulations)], percentages)
 		plt.axis([0, simulations, 0, 1])
-		plt.legend(['e = 0.1', 'e = 0.2', 'e = 0.3', 'e = 0.4'], loc='lower right')
+		# plt.legend(['e = 0.1', 'e = 0.2', 'e = 0.3', 'e = 0.4'], loc='lower right')
+		plt.legend(['E-greedy', 'Softmax'], loc='lower right')
 		plt.xlabel('Simulations')
 		plt.ylabel('Average reward')
 		plt.show()
 
-plotResults(100, 50, "simulation.txt")
+plotResults(200, 50, "simulation.txt")

@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<div class="post-container" ng-repeat="post in ctrl.posts" ng-show="ctrl.isSelected($index)">
-		<h5><a class="back" ng-click="ctrl.selectTab('blog')"><< See all posts</a></h5>
+		<!-- <h5><a class="back" ng-click="ctrl.selectTab('blog')"><< See all posts</a></h5> -->
 		<h3>{{ post.title }}</h3>
 		<img src="{{ post.thumbnail }}" alt="{{ post.title }}" />
 		<p>{{ post.content }}</p>

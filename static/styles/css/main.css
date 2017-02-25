@@ -2,6 +2,10 @@
 	Main LESS file
 	Overwriting the default Bootstrap styles
 */
+body {
+  font-family: 'Open Sans';
+}
+/* NavBar */
 .navbar {
   position: absolute;
   width: 100%;
@@ -19,23 +23,114 @@
 .navbar-default {
   background-color: transparent;
   border: 0px;
+  font-weight: bold;
+}
+.navbar-default .navbar-nav li {
+  transition: all 0.2s ease-in-out;
 }
 .navbar-default .navbar-nav li a {
-  color: #fff;
+  color: #e67e22;
   text-transform: uppercase;
 }
-.navbar-default .navbar-nav li .active {
-  background-color: transparent;
+.navbar-default .navbar-nav li a:hover {
+  color: #d35400;
 }
+.navbar-default .navbar-nav li a:visited {
+  color: #e67e22;
+}
+.navbar-default .navbar-nav li:hover {
+  transform: scale(1.06);
+}
+.navbar-default .navbar-nav .active a {
+  color: #d35400;
+  background: transparent;
+  border-bottom: 1px solid #d35400;
+  padding-bottom: 3px;
+}
+.navbar-default .navbar-nav .active a:hover {
+  color: #d35400;
+  background: transparent;
+  border-bottom: 1px solid #d35400;
+  padding-bottom: 3px;
+}
+.navbar-default .navbar-nav .active a:visited {
+  color: #d35400;
+  background-color: none;
+}
+/* Header */
 .page-header {
-  margin: 0px;
+  margin: 30px 100px;
   padding: 30px;
-  background-image: url('../../images/header.jpg');
-  background-size: cover;
-  height: 350px;
-  color: #fff;
+  background-image: url('../../images/header2.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  height: 400px;
+  color: #2c3e50;
   text-align: center;
-  text-shadow: 1px 1px #000;
+  text-transform: uppercase;
+}
+.page-header h1 {
+  transition: color 0.2s ease-in-out;
+  text-align: right;
+  margin-right: 100px;
+  margin-top: 100px;
+}
+.page-header h1:hover {
+  color: #bdc3c7;
+}
+/* Thumbnails */
+.thumbnail {
+  border-radius: 0px;
+  border: 0px;
+  transition: all 0.2s ease-in-out;
+}
+.thumbnail .caption {
+  padding: 16px;
+  color: #2c3e50;
+}
+.thumbnail .caption h3 a {
+  color: #34495e;
+}
+.thumbnail .caption h3 a:hover {
+  color: #2980b9;
+  text-decoration: none;
+  cursor: pointer;
+}
+.thumbnail .btn-primary {
+  border-radius: 0px;
+  background-color: #34495e;
+  border: 0px;
+}
+.thumbnail .btn-primary:hover {
+  background-color: #2c3e50;
+}
+.thumbnail:hover {
+  transform: scale(1.02);
+}
+/* Post container */
+.post-container {
+  background-color: #fff;
+  border: 1px solid #bdc3c7;
+  padding: 25px;
+  display: inline-block;
+}
+.post-container img {
+  float: right;
+  margin-left: 10px;
+}
+.post-container h3 {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  color: #34495e;
+  font-weight: bold;
+}
+.post-container p {
+  color: #2c3e50;
+}
+.post-container:after {
+  clear: both;
+  display: block;
 }
 /* Layout variations */
 #main {
@@ -69,18 +164,47 @@
   display: block;
 }
 /* Colour scheme variations */
+.light {
+  background-color: #ecf0f1;
+}
+.light #main .thumbnail {
+  background-color: #fff;
+}
 .dark {
-  background-color: #474747;
+  background-color: #34495e;
 }
 .dark .page-header {
-  border-color: #0c0c0c;
+  color: #ecf0f1;
 }
 .dark #main .thumbnail {
-  background-color: #0c0c0c;
-  border-color: #0c0c0c;
+  background-color: #2c3e50;
+  border-color: #2c3e50;
 }
-.dark #main .thumbnail h3,
+.dark #main .thumbnail h3 a {
+  color: #ecf0f1;
+}
+.dark #main .thumbnail h3 a:hover {
+  color: #bdc3c7;
+}
 .dark #main .thumbnail p {
+  color: #fff;
+}
+.dark #main .thumbnail .btn-primary {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+.dark #main .thumbnail .btn-primary:hover {
+  background-color: #bdc3c7;
+  color: #2c3e50;
+}
+.dark #main .post-container {
+  background-color: #2c3e50;
+  border: 0px;
+}
+.dark #main .post-container h3 {
+  color: #ecf0f1;
+}
+.dark #main .post-container p {
   color: #fff;
 }
 /* Text size variations */

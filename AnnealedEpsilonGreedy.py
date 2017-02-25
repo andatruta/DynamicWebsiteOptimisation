@@ -2,6 +2,7 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from itertools import product
 import random as rand
+import math
 
 # Set MongoDB details
 client = MongoClient('localhost:27017')
@@ -37,19 +38,9 @@ class AnnealedEpsilonGreedy():
 		action = db.Clicks.find_one({"$and": [{"layout": version.get("layout")}, {"font_size": version.get("fontSize")}, {"colour_scheme": version.get("colourScheme")}]})
 		q = float(action.get("value"))
 		k = float(action.get("count"))
-		new_value = q + 1 / (k + 1) * (reward - q)
-		# new_value = ((k - 1) / float(k)) * q + ( 1 / float(k)) * reward
-		# print "new val: ", new_value
 		_id = action.get("_id")
 		db.Clicks.update_one({"_id": _id},{"$set": {"count": k + 1, "value": new_value}}, upsert=False)
 		self.actionValues = self.getActionValues()
-		self.counts = self.getCounts()
-
-	def updateCount(self, version):
-		action = db.Clicks.find_one({"$and": [{"layout": version.get("layout")}, {"font_size": version.get("fontSize")}, {"colour_scheme": version.get("colourScheme")}]})
-		k = float(action.get("count"))
-		_id = action.get("_id")
-		db.Clicks.update_one({"_id": _id},{"$set": {"count": k + 1}}, upsert=False)
 		self.counts = self.getCounts()
 
 	def greedyAction(self):

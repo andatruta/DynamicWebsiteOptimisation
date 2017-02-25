@@ -4,6 +4,11 @@ var app = angular.module('app', [
  'ngRoute'
 ]);
 
+app.config(['$locationProvider', function($locationProvider) {
+	$locationProvider.hashPrefix('');
+}]);
+
+
 app.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
@@ -12,8 +17,8 @@ app.config(['$routeProvider',
 				controller: 'indexController',
 				controllerAs: 'ctrl',
 			}).
-			when('/profile',  {
-				templateUrl: 'static/partials/about.html',
+			when('/about',  {
+				templateUrl: '../static/partials/about.html',
 				controller: 'aboutController',
 				controllerAs: 'ctrl',
 			}).

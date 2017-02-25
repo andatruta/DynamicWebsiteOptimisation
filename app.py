@@ -28,7 +28,7 @@ font_sizes = ["small", "large"]
 colour_schemes = ["dark", "light"]
 features = [layouts, font_sizes, colour_schemes]
 # Initialise bandit algorithm
-bandit = EpsilonGreedy(0.2, features)
+# bandit = EpsilonGreedy(0.2, features)
 
 @app.route("/")
 def index():
@@ -52,19 +52,20 @@ def generate_layout():
 	# Get layout version from Bandit algorithm
 	# bandit = EpsilonGreedy(0.2, features)
 	# Register session variables
-	bandit = EpsilonGreedy(0.2, features)
-	session['layoutType'] = bandit.getVersion()
-	session['clicks'] = 0
-	layout = session['layoutType'].get('layout')
-	colour_scheme = session['layoutType'].get('colourScheme')
-	font_size = session['layoutType'].get('fontSize')
-	# Register session to DB
-	# db.Clicks.insert_one({'session_id': session['uid'], 'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
-	if db.Clicks.find({"$and": [{"layout": layout}, {"font_size": font_size}, {"colour_scheme": colour_scheme}]}).count() == 0:
-		db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'count': 1, 'value': 0.0})
-	# else increment count
-	else:
-		bandit.updateCount(session['layoutType'])
+	# bandit = EpsilonGreedy(0.2, features)
+	# session['layoutType'] = bandit.getVersion()
+	# session['clicks'] = 0
+	# layout = session['layoutType'].get('layout')
+	# colour_scheme = session['layoutType'].get('colourScheme')
+	# font_size = session['layoutType'].get('fontSize')
+	# # Register session to DB
+	# # db.Clicks.insert_one({'session_id': session['uid'], 'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
+	# if db.Clicks.find({"$and": [{"layout": layout}, {"font_size": font_size}, {"colour_scheme": colour_scheme}]}).count() == 0:
+	# 	db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'count': 1, 'value': 0.0})
+	# # else increment count
+	# else:
+	# 	bandit.updateCount(session['layoutType'])
+	session['layoutType'] = {"layout": "grid", "fontSize": "large", "colourScheme": "light"}
 	print "layout type: ", session['layoutType'], session['uid']
 	return session['layoutType']
 

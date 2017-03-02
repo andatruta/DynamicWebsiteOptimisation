@@ -6,11 +6,13 @@ def plotResults(simulations, horizon, sim_file):
 			percentages = [float(num) for num in line.split()]
 			# percentages = reduce_list(percentages, 10)
 			plt.plot([i for i in range(simulations)], percentages)
-		plt.axis([0, simulations, 0, 1])
-		# plt.legend(['e = 0.1', 'e = 0.2', 'e = 0.3', 'e = 0.4'], loc='lower right')
-		plt.legend(['E-greedy', 'Softmax'], loc='lower right')
+		plt.axis([0, simulations, 0, 1.05])
+		# plt.legend(['t = 0.1', 't = 0.2', 't = 0.3', 't = 0.4'], loc='lower right')
+		plt.legend(['E-greedy', 'Softmax', 'UCB'], loc='lower right')
+		plt.title('Average reward of different algorithms')
 		plt.xlabel('Simulations')
-		plt.ylabel('Average reward')
+		plt.ylabel('Probability of selecting the best arm')
+		plt.margins(0.5)
 		plt.show()
 
-plotResults(200, 50, "simulation.txt")
+plotResults(100, 50, "simulation.txt")

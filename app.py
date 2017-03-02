@@ -65,7 +65,7 @@ def generate_layout():
 	# # else increment count
 	# else:
 	# 	bandit.updateCount(session['layoutType'])
-	session['layoutType'] = {"layout": "grid", "fontSize": "large", "colourScheme": "light"}
+	session['layoutType'] = {"layout": "grid", "fontSize": "large", "colourScheme": "dark"}
 	print "layout type: ", session['layoutType'], session['uid']
 	return session['layoutType']
 

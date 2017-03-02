@@ -1,4 +1,4 @@
-angular.module('app').controller('contactController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+angular.module('app').controller('contactController', ['$scope', '$rootScope', '$window', function ($scope, $rootScope, $window) {
 
 	var ctrl = this;
 

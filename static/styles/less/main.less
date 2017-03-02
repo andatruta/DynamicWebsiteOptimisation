@@ -108,18 +108,19 @@ body {
 			cursor: pointer;
 		}
 	}
-	.btn-primary {
-		border-radius: 0px;
-		background-color: #34495e;
-		border: 0px;
-	}
-	.btn-primary:hover {
-		background-color: #2c3e50;
-	}
 }
 
 .thumbnail:hover {
 	transform: scale(1.02);
+}
+
+.btn-primary {
+	border-radius: 0px;
+	background-color: #34495e;
+	border: 0px;
+}
+.btn-primary:hover {
+	background-color: #2c3e50;
 }
 
 /* Post container */
@@ -147,6 +148,28 @@ body {
 .post-container:after {
 	clear: both;
 	display: block;
+}
+
+/* Contact page */
+
+#contact {
+	position: relative;
+	overflow: auto;
+	width: 60%;
+	margin: 0 auto;
+	margin-bottom: 50px;
+	input, textarea {
+		width: 433px;
+		margin: 3px 0px;
+		border: 0px;
+		box-shadow: none;
+	}
+	label {
+		margin-top: 13px;
+	}
+	button {
+		margin: 25px 15px;
+	}
 }
 
 /* Layout variations */

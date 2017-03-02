@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from EpsilonGreedy import EpsilonGreedy
 from AnnealedEpsilonGreedy import AnnealedEpsilonGreedy
 from Softmax import Softmax
+from UCB import UCB
 
 class User:
 	def __init__(self):
@@ -28,11 +29,11 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 50
-simulations = 250
+horizon = 200
+simulations = 100
 avg_rewards =[0.0 for i in range(simulations)]
-epsilon = [0.1, 0.2, 0.3, 0.4]
-algos = ["standard", "softmax"]
+epsilon = [0.1]
+algos = ["standard", "softmax", "ucb"]
 
 # Website variables
 layouts = ["grid", "list"]
@@ -55,6 +56,8 @@ for algo in algos:
 		bandit = EpsilonGreedy(0.1, features)
 	elif algo == "softmax":
 		bandit = Softmax(0.1, features)
+	elif algo == "ucb":
+		bandit = UCB(features)
 
 	for i in range(simulations):
 		reward_sum = 0.0
@@ -68,6 +71,7 @@ for algo in algos:
 				# bias for light colour schemes
 				user.setColour("light")
 				user.setFont("large")
+				user.setLayout("grid")
 			else:
 				# bias for dark colour schemes
 				user.setColour("dark")
@@ -89,15 +93,18 @@ for algo in algos:
 			# # insert version to DB if there is no entry
 			# if db.Clicks.find({"$and": [{"layout": layout}, {"font_size": font_size}, {"colour_scheme": colour_scheme}]}).count() == 0:
 			# 	db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'count': 0, 'value': 0.0})
+			# check if the bandit chose the best arm
 			reward = 0.0
+			# if (layout == "grid" and colour_scheme == "light" and font_size == "large"):
+			# 	reward = 1.0
 			if (user.layout == "" or user.layout == layout) and (user.colour == "" or user.colour == colour_scheme) and (user.font == "" or user.font == font_size):
-				reward = 1.0
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': clicks})
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 1})
+				reward = 1.0
 				bandit.updateValue(version, reward)
 			else:
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
-				bandit.updateValue(version, 0.0)
+				bandit.updateValue(version, reward)
 			# print "reward: ", reward
 			# rewards[index] = reward
 			reward_sum += reward

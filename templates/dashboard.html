@@ -2,13 +2,17 @@
 <html>
 	<head>
 		<base href="/" />
+		<meta charset="UTF-8" />
 		<script src="static/bower_components/angular/angular.js"></script>
 		<script src="static/bower_components/angular-route/angular-route.js"></script>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<!-- <script src="static/dashboard/d3/d3.min.js"></script> -->
 		<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="static/js/app.js"></script>
 		<script src="static/dashboard/controllers/analytics.controller.js"></script>
 		<!-- <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.css" /> -->
-		<link rel="stylesheet" href="static/styles/css/dashboard.css" />
+		<link rel="stylesheet" href="static/dashboard/css/main.css" />
+		<link rel="stylesheet" href="static/dashboard/css/graph.css" />
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">  		
 	</head>
 	<body ng-app="dashboard">
@@ -18,23 +22,11 @@
 				<img src="static/dashboard/images/icons/user.png" alt="My Account" />
 			</div>
 		</div>
-		<div id="nav-bar">
-			<ul class="nav">
-				<li>
-					<span><img src="static/dashboard/images/icons/home-icon.png" alt="Home"/></span>
-					<a href="#">Home</a>
-				</li>
-				<li>
-					<span><img src="static/dashboard/images/icons/create-icon.png" alt="Create"/></span>
-					<a href="/#/create">Create</a>
-				</li>
-				<li>
-					<span><img src="static/dashboard/images/icons/analytics-icon.png" alt="Analytics"/></span>
-					<a href="/#/analytics">Analytics</a>
-				</li>
-				<li>
-					<span><img src="static/dashboard/images/icons/settings-icon.png" alt="Settings"/></span>
-					<a href="/#/settings">Settings</a>
+		<div id="nav-bar" ng-controller="selectPage">
+			<ul class="nav" >
+				<li ng-click="selectLink($index)" ng-repeat="page in pages">
+					<span><img src="{{ page.icon|angular }}" alt="{{ page.title|angular }}"/></span>
+					<a href="{{ page.link|angular }}" ng-class="{active : $index == selectedLink}">{{ page.title|angular }}</a>
 				</li>
 			</ul>
 		</div>

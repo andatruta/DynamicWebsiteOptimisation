@@ -31,7 +31,8 @@ app.config(['$routeProvider',
 			otherwise({
 				redirectTo: '/'
 			});
-	}]);
+	}
+]);
 
 var dashboard = angular.module('dashboard', [
  'ngRoute'
@@ -53,4 +54,40 @@ dashboard.config(['$routeProvider',
 			otherwise({
 				redirectTo: '/dashboard'
 			});
-	}]);
+	}
+]);
+
+dashboard.controller('selectPage', function($scope) {
+
+    $scope.pages = [
+            {
+                'title': 'Home',
+                'link': '#',
+                'icon': 'static/dashboard/images/icons/home-icon.png'
+            },
+            {
+                'title': 'Create',
+                'link': '/#/create',
+                'icon': 'static/dashboard/images/icons/create-icon.png'
+
+            },
+            {
+                'title': 'Analytics',
+                'link': '/#/analytics',
+                'icon': 'static/dashboard/images/icons/analytics-icon.png'
+            },
+            {
+                'title': 'Settings',
+                'link': '/#/settings',
+                'icon': 'static/dashboard/images/icons/settings-icon.png'
+            },
+        ];
+
+    $scope.selectedLink = 0;
+
+    $scope.selectLink = function(index) {
+    	console.log(index);
+       $scope.selectedLink = index; 
+    };
+});
+

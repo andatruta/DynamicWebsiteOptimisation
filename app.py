@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, send_file, jsonify, session
+from flask_triangle import Triangle
 from flask_socketio import SocketIO, emit
 from flask_pymongo import PyMongo
 from flask_uuid import FlaskUUID
@@ -12,6 +13,7 @@ from UCB import UCB
 
 # Create app and PyMongo DB
 app = Flask(__name__)
+Triangle(app)
 socketio = SocketIO(app)
 flask_uuid = FlaskUUID()
 flask_uuid.init_app(app)

@@ -84,11 +84,12 @@ h2 {
 .stats {
   width: 100%;
   display: inline-block;
+  margin-bottom: 20px;
 }
-.stats .graph {
+.stats #graph {
   background-color: #fff;
   width: 65%;
-  height: 150px;
+  /*height: 150px;*/
   float: left;
   margin-right: 40px;
 }

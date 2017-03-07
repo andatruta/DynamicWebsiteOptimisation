@@ -31,7 +31,8 @@ module.exports = function(grunt) {
 	    	default: {
 	    		files: [{
 	    			'static/styles/css/main.css' : 'static/styles/less/main.less',
-	    			'static/styles/css/dashboard.css' : 'static/styles/less/dashboard.less'
+	    			'static/dashboard/css/main.css' : 'static/dashboard/less/main.less',
+	    			'static/dashboard/css/graph.css' : 'static/dashboard/less/graph.less'
 	    		}]
 	    	}
 	    }	

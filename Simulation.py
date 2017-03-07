@@ -8,6 +8,8 @@ from EpsilonGreedy import EpsilonGreedy
 from AnnealedEpsilonGreedy import AnnealedEpsilonGreedy
 from Softmax import Softmax
 from UCB import UCB
+from MOEpsilonGreedy import MOEpsilonGreedy
+from MOSoftmax import MOSoftmax
 
 class User:
 	def __init__(self):
@@ -29,17 +31,17 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 200
-simulations = 100
+horizon = 100
+simulations = 500
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
-algos = ["standard", "softmax", "ucb"]
+algos = ["e-greedy", "ucb"]
 
 # Website variables
-layouts = ["grid", "list"]
+layouts = ["grid", "list", "tiles"]
 # layouts = ["grid"]
-font_sizes = ["small", "large"]
-colour_schemes = ["dark", "light"]
+font_sizes = ["small", "large", "medium"]
+colour_schemes = ["dark", "light", "grey"]
 # colour_schemes = ["light"]
 features = [layouts, font_sizes, colour_schemes]
 
@@ -50,12 +52,12 @@ for algo in algos:
 	# initialise all possible versions into DB
 	versions = list(product(features[0], features[1], features[2]))
 	for v in versions:
-		db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0})
+		db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0})
 	print "algo: ", algo
-	if algo == "standard":
-		bandit = EpsilonGreedy(0.1, features)
+	if algo == "e-greedy":
+		bandit = MOEpsilonGreedy(0.1, features)
 	elif algo == "softmax":
-		bandit = Softmax(0.1, features)
+		bandit = MOSoftmax(0.1, features)
 	elif algo == "ucb":
 		bandit = UCB(features)
 
@@ -84,6 +86,8 @@ for algo in algos:
 			# 	user.setFont("large")
 			# Random number of clicks the user will perform if they like the website
 			clicks = random.randint(1, 4)
+			# Time spent on the website
+			time = random.randint(2, 8)
 			# Get layout version from Bandit algorithm
 			version = bandit.getVersion()
 			# print "version: ", version
@@ -101,10 +105,13 @@ for algo in algos:
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': clicks})
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 1})
 				reward = 1.0
-				bandit.updateValue(version, reward)
+				rewards = {"clicks": clicks, "time": time}
+				# print "rewards: ", rewards
+				bandit.updateValue(version, rewards)
 			else:
 				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
-				bandit.updateValue(version, reward)
+				rewards = {"clicks": 0, "time": 0}
+				bandit.updateValue(version, rewards)
 			# print "reward: ", reward
 			# rewards[index] = reward
 			reward_sum += reward

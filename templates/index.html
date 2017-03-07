@@ -1,13 +1,14 @@
 <!doctype html>
 <html>
 	<head>
+		<base href="/" />
+		<script src="static/bower_components/angular/angular.js"></script>
+		<script src="static/bower_components/angular-route/angular-route.js"></script>
+		<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript">
 			window.layoutType = JSON.parse('{{layout|tojson}}');
 			console.log(window.layoutType);
 		</script>
-		<script src="static/bower_components/angular/angular.js"></script>
-		<script src="static/bower_components/angular-route/angular-route.js"></script>
-		<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="static/js/app.js"></script>
 		<script src="static/js/controllers/index.controller.js"></script>
 		<script src="static/js/controllers/about.controller.js"></script>
@@ -50,4 +51,31 @@
 		<!-- NG-VIEW -->
 		<div ng-view></div>
 	</body>
+
+<script type="text/javascript">
+	var time = new Date();
+
+	$(document).ready(function() {
+		startTime = time.getTime();
+		console.log(startTime);
+
+		window.onbeforeunload = function() {
+			endTime = new Date();
+			console.log(endTime.getTime());
+			var time = endTime - startTime;
+			console.log(time);
+			$.ajax({ 
+				type: "POST",
+				async: false,
+				url: "/registerTime",
+				contentType: "application/json",
+				data: JSON.stringify({
+					time: time
+				})
+			});
+			// return "hello";
+		}
+	});
+</script>	
+
 </html>

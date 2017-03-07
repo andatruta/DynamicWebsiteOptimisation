@@ -5,6 +5,7 @@ var app = angular.module('app', [
 ]);
 
 app.config(['$locationProvider', function($locationProvider) {
+	$locationProvider.html5Mode(true);
 	$locationProvider.hashPrefix('');
 }]);
 
@@ -18,7 +19,7 @@ app.config(['$routeProvider',
 				controllerAs: 'ctrl',
 			}).
 			when('/about',  {
-				templateUrl: '../static/partials/about.html',
+				templateUrl: 'static/partials/about.html',
 				controller: 'aboutController',
 				controllerAs: 'ctrl',
 			}).
@@ -29,5 +30,27 @@ app.config(['$routeProvider',
 			}).
 			otherwise({
 				redirectTo: '/'
+			});
+	}]);
+
+var dashboard = angular.module('dashboard', [
+ 'ngRoute'
+]);
+
+dashboard.config(['$locationProvider', function($locationProvider) {
+	$locationProvider.html5Mode(true);
+	$locationProvider.hashPrefix('');
+}]);
+
+dashboard.config(['$routeProvider',
+	function($routeProvider) {
+		$routeProvider.
+			when('/dashboard', {
+				templateUrl: 'static/dashboard/index.html',
+				controller: 'analyticsController',
+				controllerAs: 'ctrl',
+			}).
+			otherwise({
+				redirectTo: '/dashboard'
 			});
 	}]);

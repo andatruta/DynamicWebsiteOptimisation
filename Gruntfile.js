@@ -30,7 +30,8 @@ module.exports = function(grunt) {
 	    less: {
 	    	default: {
 	    		files: [{
-	    			'static/styles/css/main.css' : 'static/styles/less/main.less'
+	    			'static/styles/css/main.css' : 'static/styles/less/main.less',
+	    			'static/styles/css/dashboard.css' : 'static/styles/less/dashboard.less'
 	    		}]
 	    	}
 	    }	

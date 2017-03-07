@@ -1,0 +1,132 @@
+/* Dashboard styles */
+body {
+  font-family: 'Open Sans';
+  color: #2c3e50;
+  background-color: #ecf0f1;
+  margin: 0px;
+}
+#header {
+  width: 100%;
+  min-height: 70px;
+  background-color: #fff;
+  border-bottom: 2px solid #bdc3c7;
+}
+#header #profile {
+  position: absolute;
+  right: 10px;
+  padding: 10px;
+}
+#header #profile a {
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #bdc3c7;
+  font-size: 13px;
+  padding: 5px;
+}
+#header #profile img {
+  width: 48px;
+  height: 48px;
+}
+#nav-bar {
+  top: 70px;
+  width: 125px;
+  bottom: 0px;
+  position: fixed;
+  background-color: #2c3e50;
+}
+#nav-bar ul {
+  margin: 0px;
+  padding-left: 0px;
+}
+#nav-bar ul li {
+  text-align: center;
+  height: 75px;
+  border-bottom: 2px solid #bdc3c7;
+  padding: 20px;
+  display: block;
+}
+#nav-bar ul li span {
+  margin: auto;
+  display: inherit;
+  padding-bottom: 10px;
+}
+#nav-bar ul li a {
+  display: inherit;
+  margin: auto;
+  text-transform: uppercase;
+  color: #bdc3c7;
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+#nav-bar ul li a:hover,
+#nav-bar ul li .active {
+  color: #f1c40f;
+}
+#dashboard-main {
+  margin-left: 125px;
+  padding: 40px;
+}
+h1 {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 0px;
+}
+h2 {
+  font-size: 15px;
+  font-weight: 400;
+  margin: 8px 0px;
+}
+/* Home styles */
+.stats {
+  width: 100%;
+  display: inline-block;
+}
+.stats .graph {
+  background-color: #fff;
+  width: 65%;
+  height: 150px;
+  float: left;
+  margin-right: 40px;
+}
+.stats .versions-list {
+  background-color: #fff;
+  width: 25%;
+  float: left;
+  padding: 20px;
+}
+.stats .versions-list ul {
+  list-style: none;
+  cursor: pointer;
+}
+.stats .versions-list ul li:before {
+  content: "";
+  width: 17px;
+  height: 17px;
+  background-color: #2ecc71;
+  display: inline-block;
+  margin-right: 30px;
+}
+.stats:after {
+  clear: both;
+  display: block;
+}
+.versions {
+  width: 100%;
+  display: inline-block;
+}
+.versions .thumbnail {
+  display: inline-block;
+  width: 20%;
+  background-color: #fff;
+  padding: 10px;
+  margin-right: calc(20% / 6.5);
+  margin-bottom: 25px;
+}
+.versions .thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+}

@@ -1,0 +1,19 @@
+<h1>Current stats</h1>
+
+<div class="stats">
+	<div class="graph">
+	</div>
+	<div class="versions-list">
+		<ul ng-repeat="version in ctrl.versions">
+			<li><span class="version-square"></span>{{ version.title }}</li>
+		</ul>
+	</div>
+</div>
+
+<h1>Versions</h1>
+<div class="versions">
+	<div class="thumbnail" ng-repeat="version in ctrl.versions">
+		<img src="{{ version.thumbnail }}" alt="{{ version.title }}" />
+		<h2>{{ version.title }}</h2>
+	</div>
+</div>

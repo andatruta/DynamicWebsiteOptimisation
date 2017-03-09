@@ -5,6 +5,10 @@
 body {
   font-family: 'Open Sans';
 }
+.close-x {
+  font-size: 5px;
+  top: 0px;
+}
 /* NavBar */
 .navbar {
   position: absolute;

@@ -3,6 +3,7 @@ import random
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
 # 10k fake users
 # 63% have a bias for light
@@ -26,25 +27,45 @@ class User:
 	def setFont(self, font):
 		self.font = font
 
-def plotResults(simulations, horizon, cumulative_rewards, rewards):
-	percentages = [0.0 for i in range(simulations)]
-	for i in range(simulations):
-		percentages[i] = (cumulative_rewards[i*horizon + horizon - 1] / horizon) * 100
-	print percentages
-	plt.plot([i for i in range(simulations)], percentages)
-	plt.axis([0, simulations, 0, 100])
-	plt.show()
+def writeStats(filename, date):
+	with open(filename, "a") as file:
+		file.write(str(date) + ",")
+		versions = db.Clicks.find()
+		for i, v in enumerate(versions):
+			file.write(str(v.get("percentage")) + ",") if i != versions.count() - 1 else file.write(str(v.get("percentage")))
+		file.write("\n")	
 
-horizon = 10
-simulations = 50
+	file.close()
+
+# Set MongoDB details
+client = MongoClient('localhost:27017')
+db = client.ClickData
+
+horizon = 16
+simulations = 5
 cumulative_rewards =[0.0 for i in range(horizon * simulations)]
 rewards = [0.0 for i in range(horizon * simulations)]
-sim_no = 0 
+sim_no = 0
+
+stats_file = "static/dashboard/data/data.csv"
+dt = datetime.now()
+stats_date = dt.date()
+
+# open file
+# file = open(stats_file, "w")
+
+# headers = "date,"
+
+# versions = db.Clicks.find().count()
+# for i in range(versions):
+# 	headers += "version" + str(i + 1) if i == versions - 1 else "version" + str(i + 1) + ","
+# file.write(headers + '\n')
+# file.close()
 
 for i in range(simulations):
-	sim_no += 1
+
 	for j in range(horizon):
-		index = (sim_no - 1) * horizon + j
+
 		# create user object
 		user = User()
 		# Set colour scheme preference
@@ -62,21 +83,22 @@ for i in range(simulations):
 			# bias for large fonts
 			user.setFont("large")
 		clicks = random.randint(1, 4)
-		print "clicks: ", clicks, user.colour, user.font
-		casper_script = subprocess.Popen(["casperjs", "button-click.js", user.layout, user.colour, user.font, str(clicks)], stdout=subprocess.PIPE)
+		# Time spent on the website
+		time = random.randint(2, 15)
+		# Take version screenshot or not
+		# capture = True if (i == 0 and j < 8) else False
+		capture = False
+
+		# call CasperJS process
+		casper_script = subprocess.Popen(["casperjs", "button-click.js", user.layout, user.colour, user.font, str(clicks), str(time), str(capture), str(j + 1)], stdout=subprocess.PIPE)
 		output = casper_script.stdout.read().strip()
 		print "output :", output
-		reward = 0.0
-		if output == "1":
-			reward = 1.0
-		print reward
-		rewards[index] = reward
-		if j == 0:
-			cumulative_rewards[index] = reward
-		else:
-			cumulative_rewards[index] = reward + cumulative_rewards[index - 1]
 		# subprocess.call(["casperjs", "button-click.js", user.layout, user.colour, user.font, str(clicks)])
-print rewards
-print cumulative_rewards
-plotResults(simulations, horizon, cumulative_rewards, rewards)
+	
+	# write to Stats file - considering each horizon iteration to be one day
+	writeStats(stats_file, stats_date)
+
+	# increment date
+	stats_date += timedelta(days=1)
+
 

@@ -5,7 +5,7 @@ var app = angular.module('app', [
 ]);
 
 app.config(['$locationProvider', function($locationProvider) {
-	$locationProvider.html5Mode(true);
+	// $locationProvider.html5Mode(true);
 	$locationProvider.hashPrefix('');
 }]);
 
@@ -91,3 +91,14 @@ dashboard.controller('selectPage', function($scope) {
     };
 });
 
+dashboard.directive('errSrc', function() {
+  return {
+    link: function(scope, element, attrs) {
+      element.bind('error', function() {
+        if (attrs.src != attrs.errSrc) {
+          attrs.$set('src', attrs.errSrc);
+        }
+      });
+    }
+  }
+});

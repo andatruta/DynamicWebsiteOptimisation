@@ -4,9 +4,9 @@
 	<div id="graph">
 
 	</div>
-	<div class="versions-list">
+	<div id="versions-list">
 		<ul ng-repeat="version in ctrl.versions">
-			<li><span class="version-square"></span>{{ version.title }}</li>
+			<li><span class="version-square" ng-style="{ 'background-color': ctrl.colours[$index]}"></span>{{ version.title }}</li>
 		</ul>
 	</div>
 </div>
@@ -14,7 +14,7 @@
 <h1>Versions</h1>
 <div class="versions">
 	<div class="thumbnail" ng-repeat="version in ctrl.versions">
-		<img src="{{ version.thumbnail }}" alt="{{ version.title }}" />
+		<img ng-src="{{ version.thumbnail }}" err-src="static/dashboard/images/icons/error-icon.png" alt="{{ version.title }}" />
 		<h2>{{ version.title }}</h2>
 	</div>
 </div>

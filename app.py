@@ -73,14 +73,21 @@ def registerTime():
 def dashboard():
 	return render_template('dashboard.html')
 
+@app.route("/getVersions", methods=['GET'])
+def getVersions():
+	no_versions = db.Clicks.find().count()
+	map_versions = []
+	for i in range(1, no_versions + 1):
+		map_versions.append({'title': 'Version ' + str(i), 'thumbnail': 'static/dashboard/images/previews/version' + str(i) + '.png'})
+	# print map_versions
+	return jsonify(map_versions)
+
 def generate_layout():
 	# get all feature combinations
 	versions = list(product(features[0], features[1], features[2]))
-	print "clicks db: ", db.Clicks.count()
 	if db.Clicks.count() == 0:
 		for v in versions:
-			print v
-			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0})
+			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0.0})
 	
 	# Register session variables
 	session['layoutType'] = bandit.getVersion()

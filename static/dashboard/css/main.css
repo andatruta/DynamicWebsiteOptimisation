@@ -83,41 +83,68 @@ h2 {
 /* Home styles */
 .stats {
   width: 100%;
-  display: inline-block;
+  display: block;
   margin-bottom: 20px;
+  position: relative;
+}
+.stats #graph,
+.stats #graph:before {
+  width: 65%;
 }
 .stats #graph {
-  background-color: #fff;
-  width: 65%;
-  /*height: 150px;*/
   float: left;
   margin-right: 40px;
 }
-.stats .versions-list {
-  background-color: #fff;
+.stats #graph:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  left: 0;
+  background: #fff;
+  margin-right: 40px;
+}
+.stats #versions-list,
+.stats #versions-list:before {
   width: 25%;
-  float: left;
   padding: 20px;
 }
-.stats .versions-list ul {
+.stats #versions-list {
+  float: left;
+  margin: 0 auto;
+}
+.stats #versions-list ul {
   list-style: none;
+}
+.stats #versions-list ul li {
   cursor: pointer;
 }
-.stats .versions-list ul li:before {
-  content: "";
+.stats #versions-list ul span {
   width: 17px;
   height: 17px;
   background-color: #2ecc71;
   display: inline-block;
   margin-right: 30px;
 }
+.stats #versions-list:before {
+  left: calc(65% + 40px);
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: #fff;
+}
 .stats:after {
   clear: both;
   display: block;
+  content: "";
 }
 .versions {
   width: 100%;
   display: inline-block;
+  transition: all 0.2s ease-in-out;
 }
 .versions .thumbnail {
   display: inline-block;
@@ -130,4 +157,7 @@ h2 {
 .versions .thumbnail img {
   max-width: 100%;
   max-height: 100%;
+}
+#versions-list:hover ~ .versions {
+  background-color: #000;
 }

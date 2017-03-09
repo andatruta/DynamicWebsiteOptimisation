@@ -36,6 +36,7 @@ class UCB():
 		action = db.Clicks.find_one({"$and": [{"layout": version.get("layout")}, {"font_size": version.get("fontSize")}, {"colour_scheme": version.get("colourScheme")}]})
 		q = float(action.get("value"))
 		k = float(action.get("count"))
+		p = float(action.get("percentage"))
 		clicks = action.get("clicks")
 		time = action.get("time")
 
@@ -47,12 +48,13 @@ class UCB():
 
 		# Calculate new value 
 		new_value = q + 1 / (k + 1) * (r - q)
+		r_p = 100.0 if reward["clicks"] > 0 else 0.0
+		new_percentage = p + 1 / (k + 1) * (r_p - p)
 		# new_value = ((k - 1) / float(k)) * q + ( 1 / float(k)) * r
-		# print "new value: ", new_value
 
 		# Update DB record
 		_id = action.get("_id")
-		db.Clicks.update_one({"_id": _id},{"$set": {"count": k + 1, "value": new_value, "clicks": clicks + reward["clicks"], "time": time + reward["time"]}}, upsert=False)
+		db.Clicks.update_one({"_id": _id},{"$set": {"count": k + 1, "value": new_value, "clicks": clicks + reward["clicks"], "time": time + reward["time"], "percentage": new_percentage}}, upsert=False)
 		self.actionValues = self.getActionValues()
 		self.counts = self.getCounts()
 

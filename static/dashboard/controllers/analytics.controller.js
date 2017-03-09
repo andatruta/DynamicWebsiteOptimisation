@@ -1,32 +1,21 @@
 angular.module('dashboard').controller('analyticsController', ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
 
 	var ctrl = this;
-	
-	ctrl.versions = [
-		{
-			'title' : 'Version #1',
-			'thumbnail' : 'static/dashboard/images/previews/version1.png'		
-		},
-		{
-			'title' : 'Version #2',
-			'thumbnail' : 'static/dashboard/images/previews/version2.png'		
-		},
-		{
-			'title' : 'Version #3',
-			'thumbnail' : 'static/dashboard/images/previews/version3.png'		
-		},
-		{
-			'title' : 'Version #4',
-			'thumbnail' : 'static/dashboard/images/previews/version4.png'		
-		},
-		{
-			'title' : 'Version #5',
-			'thumbnail' : 'static/dashboard/images/previews/version5.png'		
-		},
-	];
+
+	ctrl.versions = [];
+
+	$http({
+		method: 'GET',
+		url: '/getVersions'
+	}).then(function successCallback(response) {
+		ctrl.versions = response.data;
+		// console.log(ctrl.versions);
+	}, function errorCallback(response) {
+		console.log(response);
+	});
 
 	// Colours
-	var colours = [
+	ctrl.colours = [
 		"#2ecc71",
 		"#3498db",
 		"#e67e22",
@@ -39,14 +28,14 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 		"#f39c12",
 		"#8e44ad",
 		"#c0392b"
-	]
+	];
 
-	// Graph
+	// Build Graph
 	var	margin = {top: 30, right: 40, bottom: 30, left: 50},
 		width = 690 - margin.left - margin.right,
 		height = 270 - margin.top - margin.bottom;
 
-	var	parseDate = d3.time.format("%d-%b-%y").parse;
+	var	parseDate = d3.time.format("%Y-%m-%d").parse;
 
 	var	x = d3.time.scale().range([0, width]);
 	var	y = d3.scale.linear().range([height, 0]);
@@ -75,7 +64,7 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 	};
 
 	// Get the data
-	d3.csv("static/dashboard/data/test.csv", function(error, data) {
+	d3.csv("static/dashboard/data/data.csv", function(error, data) {
 		versions = d3.keys(data[0]);
 
 		data.forEach(function(d) {
@@ -94,12 +83,14 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 
 		// Scale the range of the data
 		x.domain(d3.extent(data, function(d) { return d.date; }));
-		y.domain([0, d3.max(data, function(d) { return Math.max(d["version1"], d["version2"]); })]);
+		// y.domain([0, d3.max(data, function(d) { return Math.max(d["version1"], d["version2"]); })]);
+		y.domain([0, d3.max(data, function(d) { return 100; })]);
+
 
 		for (var i = 0; i < lines.length; i++) {
 			svg.append("path")		// Add the valueline path.
 				.attr("class", "line")
-				.style("stroke", colours[i])
+				.style("stroke", ctrl.colours[i])
 				.attr("d", lines[i](data));
 		};
 
@@ -120,15 +111,23 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 				.tickFormat("")
 			);
 
-		// Add labels
-		// for (var i = 1; i < versions.length; i++) {
-		// 	svg.append("text")
-		// 		.attr("transform", "translate(" + (width+3) + "," + y(data[0][versions[i]]) + ")")
-		// 		.attr("dy", ".35em")
-		// 		.attr("text-anchor", "start")
-		// 		.style("fill", "red")
-		// 		.text(versions[i]);
-		// }
+		// x-axis label
+		svg.append("text")
+			.attr("class", "x label")
+			.attr("text-anchor", "end")
+			.attr("x", width / 2)
+			.attr("y", height + 30)
+			.text("Date");
+
+		// y-axis label
+		svg.append("text")
+			.attr("class", "y label")
+			.attr("text-anchor", "end")
+			.attr("y", -40)
+			.attr("x", -30)
+			.attr("dy", ".75em")
+			.attr("transform", "rotate(-90)")
+			.text("Successful conversions (%)");
 
 	});
 

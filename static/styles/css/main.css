@@ -9,6 +9,37 @@ body {
   font-size: 5px;
   top: 0px;
 }
+/* Rating box */
+#rating-box {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 170px;
+  height: 60px;
+  opacity: 0.5;
+  background-color: #000;
+  padding: 20px;
+  text-align: center;
+}
+#rating-box .rating {
+  color: #a9a9a9;
+  margin-top: -10px;
+  padding: 0;
+}
+#rating-box ul.rating {
+  display: inline-block;
+}
+#rating-box .rating li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 0px 5px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+#rating-box .rating .filled {
+  color: #f1c40f;
+}
 /* NavBar */
 .navbar {
   position: absolute;

@@ -10,6 +10,7 @@ from itertools import product
 import json, os
 from EpsilonGreedy import EpsilonGreedy
 from UCB import UCB
+from IteratingBandit import IteratingBandit
 
 # Create app and PyMongo DB
 app = Flask(__name__)
@@ -20,7 +21,11 @@ flask_uuid.init_app(app)
 
 # Set MongoDB details
 client = MongoClient('localhost:27017')
+# DB for registering user behaviour
 db = client.ClickData
+# DB for registering user ratings
+db_ratings = client.RatingData
+
 
 # Set app secret (for sessions).
 app.secret_key = os.urandom(24)
@@ -30,8 +35,12 @@ layouts = ["grid", "list"]
 font_sizes = ["small", "large"]
 colour_schemes = ["dark", "light"]
 features = [layouts, font_sizes, colour_schemes]
+
 # Initialise bandit algorithm
-bandit = UCB(features)
+
+# bandit = UCB(features)
+# Bandit used for user rating - iterates through all of the versions in order
+bandit = IteratingBandit(features)
 
 @app.route("/")
 def index():
@@ -61,12 +70,18 @@ def registerTime():
 	print reward
 	# Update MongoDB entry
 	bandit.updateValue(session['layoutType'], reward)
-	# db.Clicks.update_one({'session_id': session['uid']},{'$set': {'time': session['time']}}, upsert=False)
-	# bandit.updateValue(session['layoutType'], session['clicks'])
-	return jsonify(status='OK',message='Incremented clicks successfully')
 
-	# except Exception,e:
-	# 	return jsonify(status='ERROR',message=str(e))
+	return jsonify(status='OK',message='Registered time successfully')
+
+# Register user rating
+@app.route("/rating", methods=['POST'])
+def rating():
+	rating = request.json['rating']
+	version = request.json['version']
+	bandit.updateCount(session['layoutType'])
+	print rating, version
+	db_ratings.Ratings.insert_one({'layout': version['layout'], 'font_size': version['fontSize'], 'colour_scheme': version['colourScheme'], 'rating': rating})
+	return jsonify(status='OK',message='Registered rating successfully')
 
 # DASHBOARD functions
 @app.route("/dashboard")

@@ -14,11 +14,19 @@
 		<script src="static/js/controllers/about.controller.js"></script>
 		<script src="static/js/controllers/contact.controller.js"></script>
 		<link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="static/assets/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="static/styles/css/main.css" />
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">  		
 	</head>
-	<body ng-app="app" class="{{ layout.colourScheme }}">
+	<body ng-app="app" class="{{ layout.colourScheme }}" ng-controller="mainController">
+		<!-- Close button for CasperJS -->
 		<a href="#" class="close-x">x</a>
+
+		<!-- Ratings box -->
+		<div id="rating-box">
+			<div ng-init="rating = star.rating + 1"></div>
+			<div class="star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateFunction(rating)"></div>
+		</div>
 
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default">

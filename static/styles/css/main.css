@@ -11,14 +11,15 @@ body {
 }
 /* Rating box */
 #rating-box {
+  z-index: 100;
   position: fixed;
   top: 10px;
   right: 10px;
   width: 170px;
-  height: 60px;
+  height: 50px;
   opacity: 0.5;
   background-color: #000;
-  padding: 20px;
+  padding: 15px 20px;
   text-align: center;
 }
 #rating-box .rating {
@@ -73,24 +74,24 @@ body {
 .navbar-default .navbar-nav li a:visited {
   color: #e67e22;
 }
-.navbar-default .navbar-nav li:hover {
-  transform: scale(1.06);
-}
-.navbar-default .navbar-nav .active a {
+.navbar-default .navbar-nav li a.active {
   color: #d35400;
   background: transparent;
   border-bottom: 1px solid #d35400;
   padding-bottom: 3px;
 }
-.navbar-default .navbar-nav .active a:hover {
+.navbar-default .navbar-nav li a.active:hover {
   color: #d35400;
   background: transparent;
   border-bottom: 1px solid #d35400;
   padding-bottom: 3px;
 }
-.navbar-default .navbar-nav .active a:visited {
+.navbar-default .navbar-nav li a.active:visited {
   color: #d35400;
   background-color: none;
+}
+.navbar-default .navbar-nav li:hover {
+  transform: scale(1.06);
 }
 /* Header */
 .page-header {
@@ -168,7 +169,8 @@ body {
   display: block;
 }
 /* Contact page */
-#contact {
+#contact,
+#about {
   position: relative;
   overflow: auto;
   width: 60%;
@@ -176,16 +178,20 @@ body {
   margin-bottom: 50px;
 }
 #contact input,
-#contact textarea {
+#about input,
+#contact textarea,
+#about textarea {
   width: 433px;
   margin: 3px 0px;
   border: 0px;
   box-shadow: none;
 }
-#contact label {
+#contact label,
+#about label {
   margin-top: 13px;
 }
-#contact button {
+#contact button,
+#about button {
   margin: 25px 15px;
 }
 /* Layout variations */

@@ -1,5 +1,7 @@
 'use strict';   // See note about 'use strict'; below
 
+// BLOG APP
+
 var app = angular.module('app', [
  'ngRoute'
 ]);
@@ -36,6 +38,7 @@ app.config(['$routeProvider',
 
 app.controller('mainController', ['$scope','$http', '$window', function ($scope, $http, $window) {
 	$scope.rating = 5;
+
 	$scope.rateFunction = function(rating) {
 		console.log('Rating selected - ' + rating);
 		// register rating 
@@ -47,11 +50,34 @@ app.controller('mainController', ['$scope','$http', '$window', function ($scope,
 				version: $window.layoutType
 			}
 		}).then(function successCallback(response) {
-			alert("Thank you for rating!");
+			// alert("Thank you for rating!");
+			// Reload page after rating
 			$window.location.reload();
 		}, function errorCallback(response) {
 			console.log(response);
 		});
+	};
+
+	$scope.pages = [
+		{
+			'title': 'Home',
+			'link': '#',
+		},
+		{
+			'title': 'About',
+			'link': '/#/about',
+		},
+		{
+			'title': 'Contact',
+			'link': '/#/contact',
+		},
+	];
+
+	$scope.selectedLink = 0;
+
+	$scope.selectLink = function(index) {
+		console.log(index);
+	   $scope.selectedLink = index; 
 	};
 }])
 .directive('starRating', function() {
@@ -95,6 +121,8 @@ app.controller('mainController', ['$scope','$http', '$window', function ($scope,
 	};
 });
 
+// DASHBOARD APP
+
 var dashboard = angular.module('dashboard', [
  'ngRoute'
 ]);
@@ -108,8 +136,13 @@ dashboard.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
 			when('/dashboard', {
-				templateUrl: 'static/dashboard/index.html',
+				templateUrl: 'static/dashboard/partials/index.html',
 				controller: 'analyticsController',
+				controllerAs: 'ctrl',
+			}).
+			when('/dashboard/create', {
+				templateUrl: 'static/dashboard/partials/create.html',
+				controller: 'createController',
 				controllerAs: 'ctrl',
 			}).
 			otherwise({
@@ -123,12 +156,12 @@ dashboard.controller('selectPage', function($scope) {
 	$scope.pages = [
 			{
 				'title': 'Home',
-				'link': '#',
+				'link': '/dashboard',
 				'icon': 'static/dashboard/images/icons/home-icon.png'
 			},
 			{
 				'title': 'Create',
-				'link': '/#/create',
+				'link': '/#/dashboard/create',
 				'icon': 'static/dashboard/images/icons/create-icon.png'
 
 			},

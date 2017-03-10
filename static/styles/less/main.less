@@ -14,14 +14,15 @@ body {
 
 /* Rating box */
 #rating-box {
+	z-index: 100;
 	position: fixed;
 	top: 10px;
 	right: 10px;
 	width: 170px;
-	height: 60px;
+	height: 50px;
 	opacity: 0.5;
 	background-color: #000;
-	padding: 20px;
+	padding: 15px 20px;
 	text-align: center;
 	.rating {
 		color: #a9a9a9;
@@ -81,27 +82,25 @@ body {
 			a:visited {
 				color: #e67e22;
 			}
-		}
-		li:hover {
-			transform: scale(1.06);
-		}
-		.active {
-			a {
+			a.active {
 				color: #d35400;
 				background: transparent;
 				border-bottom: 1px solid #d35400;
 				padding-bottom: 3px;	
 			}
-			a:hover {
+			a.active:hover {
 				color: #d35400;
 				background: transparent;
 				border-bottom: 1px solid #d35400;
 				padding-bottom: 3px;
 			}
-			a:visited {
+			a.active:visited {
 				color: #d35400;
 				background-color: none;
 			}
+		}
+		li:hover {
+			transform: scale(1.06);
 		}
 	}
 }
@@ -192,7 +191,7 @@ body {
 
 /* Contact page */
 
-#contact {
+#contact, #about {
 	position: relative;
 	overflow: auto;
 	width: 60%;

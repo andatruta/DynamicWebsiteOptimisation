@@ -68,8 +68,9 @@ def registerTime():
 	print 'clicks: ', session['clicks']
 	reward = {'clicks': session['clicks'], 'time': session['time']}
 	print reward
-	# Update MongoDB entry
-	bandit.updateValue(session['layoutType'], reward)
+	# Update Bandit knowledge
+	# !! Commented out for the Interating Bandit for the user rating system
+	# bandit.updateValue(session['layoutType'], reward) 
 
 	return jsonify(status='OK',message='Registered time successfully')
 
@@ -78,10 +79,12 @@ def registerTime():
 def rating():
 	rating = request.json['rating']
 	version = request.json['version']
+
 	bandit.updateCount(session['layoutType'])
-	print rating, version
+
 	db_ratings.Ratings.insert_one({'layout': version['layout'], 'font_size': version['fontSize'], 'colour_scheme': version['colourScheme'], 'rating': rating})
-	return jsonify(status='OK',message='Registered rating successfully')
+	
+	return jsonify(status='OK', message='Registered rating successfully')
 
 # DASHBOARD functions
 @app.route("/dashboard")

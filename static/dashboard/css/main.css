@@ -70,6 +70,7 @@ body {
   margin-left: 125px;
   padding: 40px;
 }
+/* Headings and text styles */
 h1 {
   font-size: 20px;
   font-weight: 400;
@@ -79,6 +80,10 @@ h2 {
   font-size: 15px;
   font-weight: 400;
   margin: 8px 0px;
+}
+label {
+  display: block;
+  font-size: 13px;
 }
 /* Home styles */
 .stats {

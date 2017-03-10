@@ -2,12 +2,13 @@
 <html>
 	<head>
 		<base href="/" />
+		<meta charset="UTF-8" />
+		<title>Blog</title>
 		<script src="static/bower_components/angular/angular.js"></script>
 		<script src="static/bower_components/angular-route/angular-route.js"></script>
 		<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript">
 			window.layoutType = JSON.parse('{{layout|tojson}}');
-			console.log(window.layoutType);
 		</script>
 		<script src="static/js/app.js"></script>
 		<script src="static/js/controllers/index.controller.js"></script>
@@ -45,9 +46,12 @@
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+						<li ng-click="selectLink($index)" ng-repeat="page in pages">
+							<a href="{{ page.link|angular }}" ng-class="{active : $index == selectedLink}">{{ page.title|angular }}</a>
+						</li>
+						<!-- <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
 						<li><a href="/#/about">About</a></li>
-						<li><a href="/#/contact">Contact</a></li>
+						<li><a href="/#/contact">Contact</a></li> -->
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->

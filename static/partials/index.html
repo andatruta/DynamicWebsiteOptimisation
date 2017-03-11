@@ -6,15 +6,14 @@
 			<img src="{{ post.thumbnail }}" alt="{{ post.title }}" />
 			<div class="caption">
 				<h3 class="{{ ctrl.fontSize }}"><a ng-click="ctrl.registerClick(parentIndex)">{{ post.title }}</a></h3>
-				<p>{{ post.descr }}</p>
+				<p ng-bind-html="post.descr"></p>
 				<p><a class="btn btn-primary read-more" role="button" ng-click="ctrl.registerClick(parentIndex)">Read more</a></p>
 			</div>
 		</div>
 	</div>
 	<div class="post-container" ng-repeat="post in ctrl.posts" ng-show="ctrl.isSelected($index)">
-		<!-- <h5><a class="back" ng-click="ctrl.selectTab('blog')"><< See all posts</a></h5> -->
 		<h3 class="{{ ctrl.fontSize }}">{{ post.title }}</h3>
 		<img src="{{ post.thumbnail }}" alt="{{ post.title }}" />
-		<p>{{ post.content }}</p>
+		<p ng-bind-html="post.content"></p>
 	</div>
 </div>

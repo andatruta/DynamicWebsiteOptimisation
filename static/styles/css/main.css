@@ -154,6 +154,7 @@ body {
 .post-container img {
   float: right;
   margin-left: 10px;
+  max-width: 40%;
 }
 .post-container h3 {
   margin-top: 0px;
@@ -275,4 +276,11 @@ h3.large {
 }
 h3.small {
   font-size: 14px;
+}
+code {
+  background: transparent;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  color: inherit;
+  font-weight: 600;
 }

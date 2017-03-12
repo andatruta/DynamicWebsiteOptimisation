@@ -3,11 +3,37 @@
 <form ng-submit="ctrl.submit()">
 	<div class="input-field">
 		<label>Name</label>
-		<input type="text" ng-model="testName" />
+		<input type="text" ng-model="ctrl.test.name" />
 	</div>
 	<div class="input-field">
 		<label>Description</label>
-		<input type="text" ng-model="" />
+		<textarea type="text" ng-model="ctrl.test.descr" ></textarea>
+	</div>
+</form>
+
+<button class="btn-blue" id="deploy-btn" type="button">Deploy</button>
+
+<div class="input-field" ng-repeat="feature in ctrl.activeFeatures">
+	<div class="btn-close" ng-click="ctrl.removeFeature($index)"><img src="static/dashboard/images/icons/close-icon.png" alt="Discard" /></div>
+	<label>Feature name</label>
+	<input type="text" ng-model="ctrl.activeFeatures[$index].name" />
+	<button class="btn-purple" type="button" ng-click="ctrl.addVariant($index)">
+		<img src="static/dashboard/images/icons/plus-icon.png" alt="Add variant" />Add variant
+	</button>
+
+	<div id="variants">
+		<div class="variant-box" ng-repeat="variant in ctrl.activeFeatures[$index].variants">
+			<div class="btn-close" ng-click="ctrl.removeVariant($parent.$index, $index)"><img src="static/dashboard/images/icons/close-icon.png" alt="Discard" /></div>
+			<label>Variant name</label>
+			<input type="text" ng-model="ctrl.activeFeatures[$parent.$index].variants[$index].name" />
+			<button class="btn-dark" type="button">
+				<img src="static/dashboard/images/icons/upload-icon.png" alt="Upload file" />Upload file
+			</button>
+		</div>
 	</div>
 
-</form>
+</div>
+
+<button class="btn-purple" id="feature-btn" type="button" ng-click="ctrl.addFeature()">
+	<img src="static/dashboard/images/icons/plus-icon.png" alt="Add feature" />Add feature
+</button>

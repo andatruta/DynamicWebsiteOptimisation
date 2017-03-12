@@ -1,4 +1,5 @@
 /* Dashboard styles */
+/* Colour variables */
 body {
   font-family: 'Open Sans';
   color: #2c3e50;
@@ -52,6 +53,10 @@ body {
   display: inherit;
   padding-bottom: 10px;
 }
+#nav-bar ul li span img {
+  width: 48px;
+  height: 48px;
+}
 #nav-bar ul li a {
   display: inherit;
   margin: auto;
@@ -84,6 +89,55 @@ h2 {
 label {
   display: block;
   font-size: 13px;
+  width: 125px;
+  vertical-align: top;
+}
+input,
+textarea {
+  border: 2px solid #ecf0f1;
+  padding: 0px 5px;
+  background-color: #fff;
+  height: 30px;
+  width: 280px;
+  transition: border .3s;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  color: #2c3e50;
+}
+input {
+  margin-right: 150px;
+}
+textarea {
+  height: 70px;
+}
+input:focus,
+textarea:focus {
+  border: 2px solid #3498db;
+  outline: none;
+}
+button {
+  padding: 8px 20px;
+  color: #fff;
+  border: none;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  font-weight: 100;
+  cursor: pointer;
+}
+button img {
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  margin-top: 2px;
+}
+.btn-blue {
+  background-color: #3498db;
+}
+.btn-purple {
+  background-color: #9b59b6;
+}
+.btn-dark {
+  background-color: #2c3e50;
 }
 /* Home styles */
 .stats {
@@ -165,4 +219,73 @@ label {
 }
 #versions-list:hover ~ .versions {
   background-color: #000;
+}
+/* Create styles */
+form {
+  display: inline-block;
+  width: 70%;
+  border-bottom: 1px solid #bdc3c7;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.input-field {
+  padding: 10px 0px;
+  display: block;
+}
+.input-field input,
+.input-field label {
+  display: inline-block;
+}
+#variants {
+  width: 100%;
+  display: inline-block;
+  margin: 20px 0px;
+}
+.variant-box {
+  width: 250px;
+  border-right: 1px solid #bdc3c7;
+  text-align: center;
+  padding: 10px;
+  margin: 10px 0px;
+  display: inline-block;
+}
+.variant-box label {
+  width: auto;
+}
+.variant-box input {
+  width: 200px;
+  margin: 20px auto;
+}
+.btn-close {
+  text-align: right;
+  margin-right: 5px;
+}
+.btn-close img {
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+}
+.ng-move,
+.ng-enter,
+.ng-leave {
+  -webkit-transition: all linear 0.3s;
+  transition: all linear 0.3s;
+}
+.ng-leave.ng-leave-active,
+.ng-move,
+.ng-enter {
+  opacity: 0;
+}
+.ng-leave,
+.ng-move.ng-move-active,
+.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+#deploy-btn {
+  vertical-align: top;
+  margin-left: 200px;
+  margin-top: -30px;
+}
+#feature-btn {
+  /*margin-top: 30px;*/
 }

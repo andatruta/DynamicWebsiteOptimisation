@@ -121,33 +121,35 @@ app.controller('mainController', ['$scope','$http', '$window', function ($scope,
 	};
 });
 
+// app.route(['/dashboard', '/dashboard/*']).get(pages.renderAdmin);
+
 // DASHBOARD APP
 
 var dashboard = angular.module('dashboard', [
- 'ngRoute'
+ 'ngRoute', 'ngAnimate'
 ]);
 
-dashboard.config(['$locationProvider', function($locationProvider) {
-	$locationProvider.html5Mode(true);
-	$locationProvider.hashPrefix('');
-}]);
-
-dashboard.config(['$routeProvider',
-	function($routeProvider) {
+dashboard.config(['$routeProvider', '$locationProvider',
+	function($routeProvider, $locationProvider) {
 		$routeProvider.
 			when('/dashboard', {
-				templateUrl: 'static/dashboard/partials/index.html',
-				controller: 'analyticsController',
-				controllerAs: 'ctrl',
+				// templateUrl: 'static/dashboard/partials/index.html',
+				templateUrl: 'static/dashboard/partials/create.html',
+				// controller: 'analyticsController',
+				controller: 'createController',
+				controllerAs: 'ctrl'
 			}).
 			when('/dashboard/create', {
 				templateUrl: 'static/dashboard/partials/create.html',
 				controller: 'createController',
-				controllerAs: 'ctrl',
+				controllerAs: 'ctrl'
 			}).
 			otherwise({
 				redirectTo: '/dashboard'
 			});
+
+		$locationProvider.html5Mode(true);
+		// $locationProvider.hashPrefix('');
 	}
 ]);
 
@@ -161,13 +163,13 @@ dashboard.controller('selectPage', function($scope) {
 			},
 			{
 				'title': 'Create',
-				'link': '/#/dashboard/create',
+				'link': '/dashboard/create',
 				'icon': 'static/dashboard/images/icons/create-icon.png'
 
 			},
 			{
 				'title': 'Analytics',
-				'link': '/#/analytics',
+				'link': '/analytics',
 				'icon': 'static/dashboard/images/icons/analytics-icon.png'
 			},
 			{

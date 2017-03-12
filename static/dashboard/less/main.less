@@ -1,9 +1,17 @@
 /* Dashboard styles */
 
+/* Colour variables */
+@grey: #bdc3c7;
+@blue: #3498db;
+@purple: #9b59b6;
+@light-grey: #ecf0f1;
+@yellow: #f1c40f;
+@dark-grey: #2c3e50;
+
 body {
 	font-family: 'Open Sans';
-	color: #2c3e50;
-	background-color: #ecf0f1;
+	color: @dark-grey;
+	background-color: @light-grey;
 	margin: 0px;
 }
 
@@ -11,7 +19,7 @@ body {
 	width: 100%;
 	min-height: 70px;
 	background-color: #fff;
-	border-bottom: 2px solid #bdc3c7;
+	border-bottom: 2px solid @grey;
 	#profile {
 		position: absolute;
 		right: 10px;
@@ -21,7 +29,7 @@ body {
 			display: inline-block;
 			margin-top: 10px;
 			text-decoration: none;
-			color: #bdc3c7;
+			color: @grey;
 			font-size: 13px;
 			padding: 5px;
 		}
@@ -37,33 +45,37 @@ body {
 	width: 125px;
 	bottom: 0px;
 	position: fixed;
-	background-color: #2c3e50;
+	background-color: @dark-grey;
 	ul {
 		margin: 0px;
 		padding-left: 0px;
 		li {
 			text-align: center;
 			height: 75px;
-			border-bottom: 2px solid #bdc3c7;
+			border-bottom: 2px solid @grey;
 			padding: 20px;
 			display: block;
 			span {
 				margin: auto;
 				display: inherit;
 				padding-bottom: 10px;
+				img {
+					width: 48px;
+					height: 48px;
+				}
 			}
 			a {
 				display: inherit;
 				margin: auto;
 				text-transform: uppercase;
-				color: #bdc3c7;
+				color: @grey;
 				font-size: 11px;
 				text-decoration: none;
 				letter-spacing: 2px;
 				font-weight: 600;
 			}
 			a:hover, .active {
-				color: #f1c40f;
+				color: @yellow;
 			}
 		}
 	}
@@ -91,6 +103,61 @@ h2 {
 label {
 	display: block;
 	font-size: 13px;
+	width: 125px;
+	vertical-align: top;
+}
+
+input, textarea {
+	border: 2px solid @light-grey;
+	padding: 0px 5px;
+	background-color: #fff;
+	height: 30px;
+	width: 280px;
+	transition: border .3s;
+	font-family: 'Open Sans';
+	font-size: 12px;
+	color: @dark-grey;
+}
+
+input {
+	margin-right: 150px;
+}
+
+textarea {
+	height: 70px;
+}
+
+input:focus, textarea:focus {
+	border: 2px solid @blue;
+	outline: none;
+}
+
+button {
+	padding: 8px 20px;
+	color: #fff;
+	border: none;
+	font-family: 'Open Sans';
+	font-size: 12px;
+	font-weight: 100;
+	cursor: pointer;
+	img {
+		width: 12px;
+		height: 12px;
+		margin-right: 10px;
+		margin-top: 2px;
+	}
+}
+
+.btn-blue {
+	background-color: @blue;
+}
+
+.btn-purple {
+	background-color: @purple;
+}
+
+.btn-dark {
+	background-color: @dark-grey;
 }
 
 /* Home styles */
@@ -174,6 +241,85 @@ label {
 
 #versions-list:hover ~ .versions {
 	background-color: #000;
+}
+
+/* Create styles */
+
+form {
+	display: inline-block;
+	width: 70%;
+	border-bottom: 1px solid @grey;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.input-field {
+	padding: 10px 0px;
+	display: block;
+	input, label {
+		display: inline-block;
+	}
+}
+
+#variants {
+	width: 100%;
+	display: inline-block;
+	margin: 20px 0px;
+}
+
+.variant-box {
+	width: 250px;
+	border-right: 1px solid @grey;
+	text-align: center;
+	padding: 10px;
+	margin: 10px 0px;
+	display: inline-block;
+	label {
+		width: auto;
+	}
+	input {
+		width: 200px;
+		margin: 20px auto;
+	}
+}
+
+.btn-close {
+	text-align: right;
+	margin-right: 5px;
+	img {
+		cursor: pointer;
+		width: 10px;
+		height: 10px;
+	}
+}
+
+.ng-move,
+.ng-enter,
+.ng-leave {
+  -webkit-transition:all linear 0.3s;
+  transition:all linear 0.3s;
+}
+
+.ng-leave.ng-leave-active,
+.ng-move,
+.ng-enter {
+  opacity:0;
+}
+
+.ng-leave,
+.ng-move.ng-move-active,
+.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+#deploy-btn {
+	vertical-align: top;
+	margin-left: 200px;
+	margin-top: -30px;
+}
+
+#feature-btn {
+	/*margin-top: 30px;*/
 }
 
 

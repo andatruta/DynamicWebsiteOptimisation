@@ -133,10 +133,10 @@ dashboard.config(['$routeProvider', '$locationProvider',
 	function($routeProvider, $locationProvider) {
 		$routeProvider.
 			when('/dashboard', {
-				// templateUrl: 'static/dashboard/partials/index.html',
-				templateUrl: 'static/dashboard/partials/create.html',
-				// controller: 'analyticsController',
-				controller: 'createController',
+				templateUrl: 'static/dashboard/partials/index.html',
+				// templateUrl: 'static/dashboard/partials/create.html',
+				controller: 'analyticsController',
+				// controller: 'createController',
 				controllerAs: 'ctrl'
 			}).
 			when('/dashboard/create', {

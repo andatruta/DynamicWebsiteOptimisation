@@ -11,21 +11,8 @@ from UCB import UCB
 from MOEpsilonGreedy import MOEpsilonGreedy
 from MOSoftmax import MOSoftmax
 from datetime import datetime, timedelta
-
-class User:
-	def __init__(self):
-		self.layout = ""
-		self.colour = ""
-		self.font = ""
-
-	def setLayout(self, layout):
-		self.layout = layout
-
-	def setColour(self, colour):
-		self.colour = colour
-
-	def setFont(self, font):
-		self.font = font
+from UserPreferences import Node, getTree
+from User import User
 
 def writeStats(filename, date):
 	with open(filename, "a") as file:
@@ -42,8 +29,8 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 16
-simulations = 20
+horizon = 10
+simulations = 10
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
 algos = ["ucb"]
@@ -69,7 +56,8 @@ for algo in algos:
 	headers = "date,"
 
 	for i, v in enumerate(versions):
-		db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
+		if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
+			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
 		headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
 	
 	# write all versions to Stats file
@@ -93,21 +81,15 @@ for algo in algos:
 
 			# create user object
 			user = User()
+			# get preferences tree
+			tree = getTree("UserPreferencesTree.pkl")
+			# set preferences
+			user.buildPreferences(tree, versions)
 
-			# Set preferences
-			if random.random() < 0.7:
-				# bias for light colour schemes
-				user.setColour("light")
-				user.setFont("large")
-				user.setLayout("grid")
-			else:
-				# bias for dark colour schemes
-				user.setColour("dark")
-
-			# Random number of clicks the user will perform if they like the website
-			clicks = random.randint(1, 4)
-			# Time spent on the website
-			time = random.randint(2, 8)
+			# # Random number of clicks the user will perform if they like the website
+			# clicks = random.randint(1, 4)
+			# # Time spent on the website
+			# time = random.randint(2, 8)
 
 			# Get layout version from Bandit algorithm
 			version = bandit.getVersion()
@@ -115,24 +97,19 @@ for algo in algos:
 			colour_scheme = version.get('colourScheme')
 			font_size = version.get('fontSize')
 
-			reward = 0.0
-			# Check if bandit chose the best arm
-			# if (layout == "grid" and colour_scheme == "light" and font_size == "large"):
-			# 	reward = 1.0
-			if (user.layout == "" or user.layout == layout) and (user.colour == "" or user.colour == colour_scheme) and (user.font == "" or user.font == font_size):
-				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': clicks})
-				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 1})
-				reward = 1.0
-				rewards = {"clicks": clicks, "time": time}
-				# print "rewards: ", rewards
-				bandit.updateValue(version, rewards)
-			else:
-				# db.Clicks.insert_one({'layout': layout, 'colour_scheme': colour_scheme, 'font_size': font_size, 'clicks': 0})
-				rewards = {"clicks": 0, "time": 0}
-				bandit.updateValue(version, rewards)
+			rating = 0
+			for v in user.preferences:
+				if v["version"][0] == layout and v["version"][1] == font_size and v["version"][2] == colour_scheme:
+					rating = v["rating"]
+
+			print "rating: ", rating
+
+			rewards = {"clicks": rating, "time": rating*5}
+
+			bandit.updateValue(version, rewards)
 			# print "reward: ", reward
 			# rewards[index] = reward
-			reward_sum += reward
+			reward_sum += rating
 
 		# calculate average reward for simulation
 		avg_rewards[i] = reward_sum / float(horizon)

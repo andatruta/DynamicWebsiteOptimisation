@@ -42,13 +42,15 @@ class UCB():
 
 		# perform linear scalarization
 		# weight vector
-		w = [1, 0.5]
+		w = [1, 1]
 		# scalarize current reward
-		r = w[0] * reward["clicks"] + w[1] * reward["time"]
+		r = float(w[0] * reward["clicks"] + w[1] * reward["time"]) / 30
 
 		# Calculate new value 
 		new_value = q + 1 / (k + 1) * (r - q)
-		r_p = 100.0 if reward["clicks"] > 0 else 0.0
+		# r_p = 100.0 if reward["clicks"] > 0 else 0.0 # calculate success percentage as whether a click occurred or not
+		# r_p = float(reward["clicks"]) / 5 * 100.0 # calculate percentage of success based on no. of clicks out of 5
+		r_p = float(r) * 100.0
 		new_percentage = p + 1 / (k + 1) * (r_p - p)
 		# new_value = ((k - 1) / float(k)) * q + ( 1 / float(k)) * r
 

@@ -1,19 +1,7 @@
 from pymongo import MongoClient
 from itertools import product
 import random
-
-"""
-
-User class used to model an artificial user
-
-"""       
-
-class User:
-    def __init__(self):
-        self.preferences = []
-
-    def addPreference(self, version, rating):
-        self.preferences.append({"version": version, "rating": rating})
+import pickle
 
 """
 
@@ -60,7 +48,8 @@ def getUsers(query):
     return users
 
 def printTree(root, level):
-    if level == len(versions) - 1:
+    # if level == len(versions) - 1:
+    if level == 3:
         return "\t"*level + "version" + str(level) + "\n"
     ret = "\t"*level + "version" + str(level) + " " + str(root.veryNegative["percentage"]) + " " + str(root.negative["percentage"]) + " " + str(root.neutral["percentage"]) + " " + str(root.positive["percentage"]) + " " + str(root.veryPositive["percentage"]) + "\n"
     ret += printTree(root.veryNegative["node"], level + 1)
@@ -73,7 +62,7 @@ def printTree(root, level):
 
 def buildBranch(root, rating, version_no, users, prev_percentage):
     # Get records where the given subset of users rated the current version with 1
-    query = db.Ratings.find(({"$and": [{"layout": versions[version_no][0]}, {"font_size": versions[version_no][1]}, {"colour_scheme": versions[version_no][2]}, {"rating": rating}, {"user_id": {"$in": users }}]}))
+    query = db.Ratings2.find(({"$and": [{"layout": versions[version_no][0]}, {"font_size": versions[version_no][1]}, {"colour_scheme": versions[version_no][2]}, {"rating": rating}, {"user_id": {"$in": users }}]}))
     # Calculate percentage of users who gave the version a rating of 1
     percentage = 0.0 if len(users) == 0 else float(query.count()) / float(len(users))
     percentage += prev_percentage
@@ -115,11 +104,11 @@ def buildNode(version_no, users):
 
 
 def buildTree():
-    users = range(0,10)
+    users = db.Ratings.distinct("user_id")
     root = buildNode(0, users)
 
-    # print printTree(root, 0)
     print root.veryNegative, root.negative, root.neutral, root.positive, root.veryPositive
+    print printTree(root, 0)
 
     return root
 
@@ -132,48 +121,44 @@ def buildTree():
 #       if i % no_versions == 0:
 #           user_id += 1
 
+# def cloneDB():
+#     for item in db.Ratings2.find():
+#         db.Ratings2.update_one(item, {"$set": {"user_type": "real"}})
+
 """
 
-Functions to build users
+Utility function to save objects into static files
+And read them from the files
 
-"""
+"""  
 
-def buildUser():
-    user = User()
-    root = treeRoot
+def save_object(obj, filename):
+    with open(filename, 'wb') as output:
+        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
 
-    # traverse the Preferences Tree
-    for i in range(0, len(versions) - 1):
-        print "version: ", i
-        prob = random.random()
-        if prob < root.veryNegative["percentage"]:
-            user.addPreference(root.version, 1)
-            root = root.veryNegative["node"]
-        elif prob >=root.veryNegative["percentage"] and prob < root.negative["percentage"]:
-            user.addPreference(root.version, 2)
-            root = root.negative["node"]
-        elif prob >=root.negative["percentage"] and prob < root.neutral["percentage"]:
-            user.addPreference(root.version, 3)
-            root = root.neutral["node"]
-        elif prob >=root.neutral["percentage"] and prob < root.positive["percentage"]:
-            user.addPreference(root.version, 4)
-            root = root.positive["node"]
-        elif prob >=root.positive["percentage"] and prob < root.veryPositive["percentage"]:
-            user.addPreference(root.version, 5)
-            root = root.veryPositive["node"]
+def getTree(filename):
+    with open(filename, 'rb') as input:
+        obj = pickle.load(input)
 
-    print user.preferences
+    return obj
 
-    return user
 
-def createUsers():
-    users = []
-
-    for i in range(0, no_users):
-        user = buildUser()
-        users.append(user)
-
-    return users    
+def averageRating():
+    s = 0
+    for v in versions:
+        query = db.Ratings2.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]})
+        avg = db.Ratings2.aggregate([{ "$match": {
+                "$and": [
+                    {"layout": v[0]},
+                    {"font_size": v[1]},
+                    {"colour_scheme": v[2]}
+                ]
+            } },
+            { "$group": { "_id" : None, "sum" : { "$sum": "$rating" } } }], useCursor=False);
+        avg = list(avg)
+        s += float(avg[0]["sum"]) / query.count()
+        print v, float(avg[0]["sum"]) / query.count()
+    print "total avg: ", float(s) / len(versions)
 
 """
 
@@ -181,29 +166,35 @@ Main section
 
 """
 
-# Set MongoDB details
-client = MongoClient('localhost:27017')
-# DB for registering user ratings
-db = client.RatingData
+# # Set MongoDB details
+# client = MongoClient('localhost:27017')
+# # DB for registering user ratings
+# db = client.RatingData
 
-# Layout features and options
-layouts = ["grid", "list"]
-font_sizes = ["small", "large"]
-colour_schemes = ["dark", "light"]
-features = [layouts, font_sizes, colour_schemes]
+# # Layout features and options
+# layouts = ["grid", "list"]
+# font_sizes = ["small", "large"]
+# colour_schemes = ["dark", "light"]
+# features = [layouts, font_sizes, colour_schemes]
 
-versions = list(product(features[0], features[1], features[2]))
-# Add empty version to serve as leaf node
-versions.append(())
-print versions
+# versions = list(product(features[0], features[1], features[2]))
+# # # Add empty version to serve as leaf node
+# # versions.append(())
+# # print versions
+
+# averageRating()
 
 
-# Build tree of preferences from exisiting real user data
-treeRoot = buildTree()
+# # Build tree of preferences from exisiting real user data
+# treeRoot = buildTree()
 
-# Generate users
-no_users = 10
-users = createUsers()
+# # Save Tree object to static file
+# save_object(treeRoot, "UserPreferencesTree.pkl")
+
+# # Generate users
+# no_users = 10
+# users = createUsers()
 
 # addUserId(db, len(versions))
+# cloneDB()
 

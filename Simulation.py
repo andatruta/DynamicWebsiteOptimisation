@@ -29,7 +29,7 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 10
+horizon = 20
 simulations = 10
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]

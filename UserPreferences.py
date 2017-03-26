@@ -104,26 +104,13 @@ def buildNode(version_no, users):
 
 
 def buildTree():
-    users = db.Ratings.distinct("user_id")
+    users = db.Ratings2.distinct("user_id")
     root = buildNode(0, users)
 
     print root.veryNegative, root.negative, root.neutral, root.positive, root.veryPositive
     print printTree(root, 0)
 
     return root
-
-# def addUserId(db, no_versions):
-#   user_id = 0
-#   i = 0
-#   for item in db.Ratings.find():
-#       db.Ratings.update_one(item, {"$set": {"user_id": user_id,}})
-#       i += 1
-#       if i % no_versions == 0:
-#           user_id += 1
-
-# def cloneDB():
-#     for item in db.Ratings2.find():
-#         db.Ratings2.update_one(item, {"$set": {"user_type": "real"}})
 
 """
 
@@ -178,11 +165,11 @@ Main section
 # features = [layouts, font_sizes, colour_schemes]
 
 # versions = list(product(features[0], features[1], features[2]))
-# # # Add empty version to serve as leaf node
-# # versions.append(())
-# # print versions
+# # Add empty version to serve as leaf node
+# versions.append(())
+# # # print versions
 
-# averageRating()
+# # averageRating()
 
 
 # # Build tree of preferences from exisiting real user data
@@ -190,11 +177,3 @@ Main section
 
 # # Save Tree object to static file
 # save_object(treeRoot, "UserPreferencesTree.pkl")
-
-# # Generate users
-# no_users = 10
-# users = createUsers()
-
-# addUserId(db, len(versions))
-# cloneDB()
-

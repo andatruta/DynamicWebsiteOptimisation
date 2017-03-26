@@ -48,6 +48,14 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 
 	var lines = [];
 	var versions = [];
+
+
+	// var tip = d3.tip()
+	// 	.attr('class', 'd3-tip')
+	// 	.offset([-10, 0])
+	// 	.html(function(d) {
+	// 		return "<strong>Version:</strong> <span style='color:red'>" + d.frequency + "</span>";
+	// })
 	  
 	var	svg = d3.select("#graph")
 		.append("svg")
@@ -59,8 +67,8 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 	function make_x_axis() {        
 		return d3.svg.axis()
 			.scale(x)
-			 .orient("bottom")
-			 .ticks(5)
+			.orient("bottom")
+			.ticks(5)
 	};
 
 	// Get the data
@@ -128,6 +136,11 @@ angular.module('dashboard').controller('analyticsController', ['$scope', '$rootS
 			.attr("dy", ".75em")
 			.attr("transform", "rotate(-90)")
 			.text("Successful conversions (%)");
+
+		// tooltips
+		// svg.selectAll("path")
+		// 	.on('mouseenter', tip.show)
+  //     		.on('mouseleave', tip.hide);
 
 	});
 

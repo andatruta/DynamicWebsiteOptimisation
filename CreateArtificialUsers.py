@@ -1,32 +1,50 @@
 from pymongo import MongoClient
 from itertools import product
 import random
+import math
+import numpy as np
 
 def getNextUserId():
     return max(db.Ratings2.find().distinct("user_id")) + 1
 
-def createUser(user, changes):
+def createUser(user, diff):
+    # print "old user: ", user, "\n"
     new_user = user
 
+    changes = 0
+
     # randomly choose n=changes versions to change the rating
-    for i in range(changes):
+    while diff != 0:
         index = random.randint(0, len(new_user) - 1)
-        print "change index: ", index
+
         # modify rating by +-1 with uniform probability
-        if random.random() < 0.5:
+        if diff < 0:
             # edge case when rating = 1 - do +1
-            print "before", new_user[index]["rating"]
             if new_user[index]["rating"] == 1:
-                new_user[index]["rating"] += 1
+                if changes < 12:
+                    new_user[index]["rating"] += 1
+                    diff -= 1
+                else:
+                    diff += 1
             else:
                 new_user[index]["rating"] = new_user[index]["rating"] - 1
-                print "after", new_user[index]["rating"]
-        else:
+                diff += 1
+        elif diff > 0:
             # edge case when rating = 5 - do -1
             if new_user[index]["rating"] == 5:
-                new_user[index]["rating"] -= 1
+                if changes < 12:
+                    new_user[index]["rating"] -= 1
+                    diff += 1
+                else:
+                    diff -= 1
             else:
                 new_user[index]["rating"] += 1
+                diff -= 1
+
+        changes += 1
+
+    # print "new_user: ", new_user
+    # print "new user total rating: ", sum([version["rating"] for version in new_user]), "\n"
 
     user_id = getNextUserId()
     for entry in new_user:
@@ -40,17 +58,28 @@ def createUser(user, changes):
         })
 
 def generateArtificialUsers(user, n):
+    total = sum([version["rating"] for version in user])
+    mean = float(sum([float(version["rating"]) / 5 for version in user])) / len(user)
+    var = np.var([float(version["rating"]) / 5 for version in user])
+    # print "user id: ", user[0]["user_id"], " mean: ", mean, " var: ", var, " total rating: ", total
+
+    alpha = (math.pow(mean, 2) - math.pow(mean, 3)) / var - mean
+    beta = alpha * (1 - mean) / mean
+
+    # print "alpha: ", alpha, " beta: ", beta
+
     for i in range(n):
-        p = random.random()
-        print "random", p
-        # New user within 1 std dev of real user
-        if p <= 0.6837:
-            changes = 2
-        elif p > 0.6837 and p <= 0.9545:
-            changes = 4
-        else:
-            changes = 6
-        createUser(user, changes)
+        user_mean = np.random.beta(alpha, beta)
+        diff = int(round(user_mean*5*8)) - total
+
+        if diff > 12:
+            diff = 12
+        elif diff < -12:
+            diff = -12
+
+        print "diff: ", diff
+
+        createUser(user, diff)
 
 
 # Set MongoDB details
@@ -69,13 +98,9 @@ users = []
 for i in range(len(real_users_ids)):
     user = db.Ratings2.find({"user_id": real_users_ids[i]})
     users.append(list(user))
-    print list(user)
-
-# for user in users:
-#   print [entry for entry in user]
 
 # Number of artificial users generated per real user
-n = 20
+n = 10
 
 # Create new users with slight deviations from the real users
 for user in users:

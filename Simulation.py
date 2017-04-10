@@ -13,6 +13,7 @@ from MOSoftmax import MOSoftmax
 from datetime import datetime, timedelta
 from UserPreferences import Node, getTree
 from User import User
+import random as rand
 
 def writeStats(filename, date):
 	with open(filename, "a") as file:
@@ -29,8 +30,8 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 20
-simulations = 10
+horizon = 250
+simulations = 12
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
 algos = ["ucb"]
@@ -102,9 +103,15 @@ for algo in algos:
 				if v["version"][0] == layout and v["version"][1] == font_size and v["version"][2] == colour_scheme:
 					rating = v["rating"]
 
-			print "rating: ", rating
+			prob = rand.random()
+			if prob <= 0.6827:
+				clicks = rand.randint(rating-1, rating+1)
+			elif prob < 0.9545:
+				clicks = rand.randint(rating-1, rating+2)
+			else:
+				clicks = rand.randint(rating-1, rating+3)
 
-			rewards = {"clicks": rating, "time": rating*5}
+			rewards = {"clicks": clicks, "time": clicks*5}
 
 			bandit.updateValue(version, rewards)
 			# print "reward: ", reward

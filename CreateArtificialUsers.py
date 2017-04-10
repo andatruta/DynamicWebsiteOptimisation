@@ -14,29 +14,23 @@ def createUser(user, diff):
     changes = 0
 
     # randomly choose n=changes versions to change the rating
-    while diff != 0:
+    while diff != 0 and changes < 8:
         index = random.randint(0, len(new_user) - 1)
 
         # modify rating by +-1 with uniform probability
         if diff < 0:
             # edge case when rating = 1 - do +1
             if new_user[index]["rating"] == 1:
-                if changes < 12:
-                    new_user[index]["rating"] += 1
-                    diff -= 1
-                else:
-                    diff += 1
+                new_user[index]["rating"] += 1
+                diff -= 1
             else:
                 new_user[index]["rating"] = new_user[index]["rating"] - 1
                 diff += 1
         elif diff > 0:
             # edge case when rating = 5 - do -1
             if new_user[index]["rating"] == 5:
-                if changes < 12:
-                    new_user[index]["rating"] -= 1
-                    diff += 1
-                else:
-                    diff -= 1
+                new_user[index]["rating"] -= 1
+                diff += 1
             else:
                 new_user[index]["rating"] += 1
                 diff -= 1
@@ -70,14 +64,14 @@ def generateArtificialUsers(user, n):
 
     for i in range(n):
         user_mean = np.random.beta(alpha, beta)
-        diff = int(round(user_mean*5*8)) - total
+        diff = int(round(user_mean*5.0*8.0)) - total
 
-        if diff > 12:
-            diff = 12
-        elif diff < -12:
-            diff = -12
+        # if diff > 12:
+        #     diff = 12
+        # elif diff < -12:
+        #     diff = -12
 
-        print "diff: ", diff
+        # print "diff: ", diff
 
         createUser(user, diff)
 
@@ -100,7 +94,7 @@ for i in range(len(real_users_ids)):
     users.append(list(user))
 
 # Number of artificial users generated per real user
-n = 10
+n = 50
 
 # Create new users with slight deviations from the real users
 for user in users:

@@ -167,7 +167,7 @@ Main section
 # versions = list(product(features[0], features[1], features[2]))
 # # Add empty version to serve as leaf node
 # versions.append(())
-# # # print versions
+# # # # print versions
 
 # # averageRating()
 

@@ -3,7 +3,7 @@
 angular.module('app').constant('ALL_POSTS', [
 	{
 		'title' : 'Multi-objective multi-armed bandits',
-		'thumbnail' : 'static/images/pic01.jpg',
+		'thumbnail' : 'static/images/webdev.jpg',
 		'descr': 'In real-life scenarios of website optimization, it is important to choose the right success metric that is most important for the business at hand.',
 		'content': `
 		In real-life scenarios of website optimization, it is important to choose the right success metric that is most important for the business at hand. 
@@ -15,7 +15,7 @@ angular.module('app').constant('ALL_POSTS', [
 	},
 	{
 		'title' : 'Upper Confidence Bound algorithm',
-		'thumbnail' : 'static/images/pic02.jpg',
+		'thumbnail' : 'static/images/webdev2.jpg',
 		'descr': 'Both <i>Epsilon-Greedy</i> and <i>Softmax</i> have a systematic weakness: they do not account for how much they already know about any of the arms available.',
 		'content': `
 		Both <i>Epsilon-Greedy</i> and <i>Softmax</i> have a systematic weakness: they do not account for how much they already know about any of the arms available.

@@ -50,8 +50,6 @@ app.controller('mainController', ['$scope','$http', '$window', function ($scope,
 				version: $window.layoutType
 			}
 		}).then(function successCallback(response) {
-			// alert("Thank you for rating!");
-			// Reload page after rating
 			$window.location.reload();
 		}, function errorCallback(response) {
 			console.log(response);
@@ -120,8 +118,6 @@ app.controller('mainController', ['$scope','$http', '$window', function ($scope,
 		}
 	};
 });
-
-// app.route(['/dashboard', '/dashboard/*']).get(pages.renderAdmin);
 
 // DASHBOARD APP
 

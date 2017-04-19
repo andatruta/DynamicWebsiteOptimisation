@@ -31,7 +31,7 @@ db = client.ClickData
 
 # Simulation variables
 horizon = 250
-simulations = 12
+simulations = 10
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
 algos = ["ucb"]

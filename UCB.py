@@ -36,7 +36,6 @@ class UCB():
 		action = db.Clicks.find_one({"$and": [{"layout": version.get("layout")}, {"font_size": version.get("fontSize")}, {"colour_scheme": version.get("colourScheme")}]})
 		q = float(action.get("value"))
 		k = float(action.get("count"))
-		p = float(action.get("percentage"))
 		new_value = q + 1 / (k + 1) * (reward - q)
 		_id = action.get("_id")
 		db.Clicks.update_one({"_id": _id},{"$set": {"count": k + 1, "value": new_value}}, upsert=False)

@@ -8,6 +8,7 @@ from EpsilonGreedy import EpsilonGreedy
 from AnnealedEpsilonGreedy import AnnealedEpsilonGreedy
 from Softmax import Softmax
 from AnnealedSoftmax import AnnealedSoftmax
+from UCB import UCB
 
 class User:
 	def __init__(self):
@@ -34,7 +35,8 @@ def run_simulations(e):
 			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0})
 		# initialise bandit
 		# bandit = EpsilonGreedy(e, features)
-		bandit = AnnealedSoftmax(e, features)
+		# bandit = AnnealedSoftmax(e, features)
+		bandit = UCB(features)
 		# initialise array of rewards for this bandit
 		reward_array = [0.0 for n in range(horizon)]
 
@@ -83,8 +85,8 @@ def run_simulations(e):
 				bandit.updateValue(version, reward)
 			if (layout == "grid" and font_size == "large" and colour_scheme == "light"):
 				accuracy = 1.0
-			reward_array[j] = reward
-			# reward_array[j] = accuracy
+			# reward_array[j] = reward
+			reward_array[j] = accuracy
 			
 		# append the rewards of the current bandit to the overall simulations array
 		sim_rewards.append(reward_array)

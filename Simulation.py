@@ -15,12 +15,14 @@ from UserPreferences import Node, getTree
 from User import User
 import random as rand
 
-def writeStats(filename, date):
+def writeStats(filename, date, clicks, time, r):
 	with open(filename, "a") as file:
 		file.write(str(date) + ",")
-		versions = db.Clicks.find()
-		for i, v in enumerate(versions):
-			file.write(str(v.get("percentage")) + ",") if i != versions.count() - 1 else file.write(str(v.get("percentage")))
+		# versions = db.Clicks.find()
+		# for i, v in enumerate(versions):
+		# 	# file.write(str(v.get("percentage")) + ",") if i != versions.count() - 1 else file.write(str(v.get("percentage")))
+		# 	file.write(str(v.get("percentage")) + ",")
+		file.write(str(clicks) + "," + str(time) + "," + str(r))
 		file.write("\n")	
 
 	file.close()
@@ -30,7 +32,7 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 250
+horizon = 100
 simulations = 10
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
@@ -44,9 +46,11 @@ colour_schemes = ["dark", "light"]
 # colour_schemes = ["light"]
 features = [layouts, font_sizes, colour_schemes]
 
-stats_file = "static/dashboard/data/data.csv"
+# stats_file = "static/dashboard/data/data.csv"
+stats_file = "static/dashboard/data/baseline_worst.csv"
 dt = datetime.now()
-stats_date = dt.date()
+# stats_date = dt.date()
+stats_date = 0
 
 # open file
 file = open("simulation.txt", "w")
@@ -56,10 +60,12 @@ for algo in algos:
 	versions = list(product(features[0], features[1], features[2]))
 	headers = "date,"
 
-	for i, v in enumerate(versions):
-		if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
-			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
-		headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
+	# for i, v in enumerate(versions):
+	# 	if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
+	# 		db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
+	# 	# headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
+	# 	headers += "version" + str(i + 1) + ","
+	headers += "clicks,time,reward"
 	
 	# write all versions to Stats file
 	# "w" is overwriting the current file
@@ -77,6 +83,8 @@ for algo in algos:
 
 	for i in range(simulations):
 		reward_sum = 0.0
+		avg_clicks = 0.0
+		avg_time = 0.0
 
 		for j in range(horizon):
 
@@ -93,10 +101,14 @@ for algo in algos:
 			# time = random.randint(2, 8)
 
 			# Get layout version from Bandit algorithm
-			version = bandit.getVersion()
-			layout = version.get('layout')
-			colour_scheme = version.get('colourScheme')
-			font_size = version.get('fontSize')
+			# version = bandit.getVersion()
+			# layout = version.get('layout')
+			# colour_scheme = version.get('colourScheme')
+			# font_size = version.get('fontSize')
+			# show the worst version as a baseline
+			layout = "list"
+			colour_scheme = "light"
+			font_size = "large"
 
 			rating = 0
 			for v in user.preferences:
@@ -107,26 +119,36 @@ for algo in algos:
 			if prob <= 0.6827:
 				clicks = rand.randint(rating-1, rating+1)
 			elif prob < 0.9545:
-				clicks = rand.randint(rating-1, rating+2)
+				clicks = rand.randint(rating-2, rating+2)
+				if clicks < 0:
+					clicks = 0
 			else:
-				clicks = rand.randint(rating-1, rating+3)
+				clicks = rand.randint(rating-3, rating+3)
+				if clicks < 0:
+					clicks = 0
 
-			rewards = {"clicks": clicks, "time": clicks*5}
+			time_multiplier = rand.randint(3,6)
+			time = rating*time_multiplier
 
-			bandit.updateValue(version, rewards)
-			# print "reward: ", reward
+			rewards = {"clicks": clicks, "time": time}
+
+			# bandit.updateValue(version, rewards)
+			print "reward: ", rewards, (0.75 * clicks + 0.25 * time) / 13.5  
 			# rewards[index] = reward
-			reward_sum += rating
+			reward_sum += (0.75 * clicks + 0.25 * time) / 13.5
+			avg_clicks += clicks
+			avg_time += time
 
 		# calculate average reward for simulation
 		avg_rewards[i] = reward_sum / float(horizon)
 		print i, avg_rewards[i]
 
 		# write to Stats file - considering each horizon iteration to be one day
-		writeStats(stats_file, stats_date)
+		writeStats(stats_file, stats_date, avg_clicks / float(horizon), avg_time / float(horizon), avg_rewards[i])
 
 		# increment date
-		stats_date += timedelta(days=1)
+		# stats_date += timedelta(days=1)
+		stats_date += 1
 
 	# write to Simulation file
 	results = ""

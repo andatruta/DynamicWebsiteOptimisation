@@ -42,9 +42,10 @@ class UCB():
 
 		# perform linear scalarization
 		# weight vector
-		w = [1, 1]
+		w = [0.75, 0.25]
 		# scalarize current reward
-		r = float(w[0] * reward["clicks"] + w[1] * reward["time"]) / 30
+		# /38 scales the reward to the interval [0,1]
+		r = float(w[0] * reward["clicks"] + w[1] * reward["time"]) / 13.5
 
 		# Calculate new value 
 		new_value = q + 1 / (k + 1) * (r - q)

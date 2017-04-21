@@ -44,7 +44,7 @@ class UCB():
 		# weight vector
 		w = [0.75, 0.25]
 		# scalarize current reward
-		# /38 scales the reward to the interval [0,1]
+		# /13.5 scales the reward to the interval [0,1]
 		r = float(w[0] * reward["clicks"] + w[1] * reward["time"]) / 13.5
 
 		# Calculate new value 

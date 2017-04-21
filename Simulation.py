@@ -33,7 +33,7 @@ db = client.ClickData
 
 # Simulation variables
 horizon = 150
-simulations = 3
+simulations = 10
 avg_rewards =[0.0 for i in range(simulations)]
 epsilon = [0.1]
 algos = ["ucb"]
@@ -57,7 +57,11 @@ file = open("simulation.txt", "w")
 
 for algo in algos:
 	# initialise all possible versions into DB
-	versions = list(product(features[0], features[1], features[2]))
+	versions_all = list(product(features[0], features[1], features[2]))
+
+	# testing only the top 4 versions
+	versions = [('grid', 'small', 'dark'), ('grid', 'large', 'light'), ('list', 'small', 'dark'), ('list', 'large', 'dark')]
+
 	headers = "date,"
 
 	for i, v in enumerate(versions):
@@ -93,7 +97,7 @@ for algo in algos:
 			# get preferences tree
 			tree = getTree("UserPreferencesTree.pkl")
 			# set preferences
-			user.buildPreferences(tree, versions)
+			user.buildPreferences(tree, versions_all)
 
 			# Get layout version from Bandit algorithm
 			version = bandit.getVersion()
@@ -105,22 +109,25 @@ for algo in algos:
 			# colour_scheme = "light"
 			# font_size = "large"
 
+			# print "version: ", version
+			# print "user: ", user.preferences
+
 			rating = 0
 			for v in user.preferences:
 				if v["version"][0] == layout and v["version"][1] == font_size and v["version"][2] == colour_scheme:
 					rating = v["rating"]
 
+			clicks = 0
 			prob = rand.random()
 			if prob <= 0.6827:
 				clicks = rand.randint(rating-1, rating+1)
 			elif prob < 0.9545:
 				clicks = rand.randint(rating-2, rating+2)
-				if clicks < 0:
-					clicks = 0
 			else:
 				clicks = rand.randint(rating-3, rating+3)
-				if clicks < 0:
-					clicks = 0
+
+			if clicks < 0:
+				clicks = 0
 
 			time_multiplier = rand.randint(3,6)
 			time = rating*time_multiplier
@@ -128,7 +135,7 @@ for algo in algos:
 			rewards = {"clicks": clicks, "time": time}
 
 			bandit.updateValue(version, rewards)
-			print "reward: ", rewards, (0.75 * clicks + 0.25 * time) / 13.5  
+			print "reward: ", rewards, rating, (0.75 * clicks + 0.25 * time) / 13.5  
 			# rewards[index] = reward
 			reward_sum += (0.75 * clicks + 0.25 * time) / 13.5
 			avg_clicks += clicks

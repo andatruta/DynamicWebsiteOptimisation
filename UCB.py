@@ -10,7 +10,8 @@ db = client.ClickData
 
 class UCB():
 	def __init__(self, features):
-		self.versions = list(product(features[0], features[1], features[2]))
+		# self.versions = list(product(features[0], features[1], features[2]))
+		self.versions = [('grid', 'small', 'dark'), ('grid', 'large', 'light'), ('list', 'small', 'dark'), ('list', 'large', 'dark')]
 		self.counts = self.getCounts()
 		self.actionValues = self.getActionValues()
 

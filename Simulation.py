@@ -14,16 +14,20 @@ from datetime import datetime, timedelta
 from UserPreferences import Node, getTree
 from User import User
 import random as rand
+import numpy as np
 
-def writeStats(filename, date, clicks, time, r):
+def writeStats(filename, date, clicks, time, r, std_dev):
 	with open(filename, "a") as file:
 		file.write(str(date) + ",")
 		versions = db.Clicks.find()
 		for i, v in enumerate(versions):
-			# file.write(str(v.get("percentage")) + ",") if i != versions.count() - 1 else file.write(str(v.get("percentage")))
-			file.write(str(v.get("percentage")) + ",")
-		file.write(str(clicks) + "," + str(time) + "," + str(r))
-		file.write("\n")	
+			# file.write(str(v.get("session_counts")) + ",") if i != versions.count() - 1 else file.write(str(v.get("session_counts")))
+			file.write(str(v.get("count") - counts[i]) + ",")
+			counts[i] = v.get("count")
+		file.write(str(clicks) + "," + str(time) + "," + str(r) + "," + str(std_dev))
+		file.write("\n")
+
+		print counts	
 
 	file.close()
 
@@ -32,9 +36,10 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 150
+horizon = 200
 simulations = 10
-avg_rewards =[0.0 for i in range(simulations)]
+# avg_rewards =[0.0 for i in range(simulations)]
+avg_rewards = []
 epsilon = [0.1]
 algos = ["ucb"]
 
@@ -57,19 +62,20 @@ file = open("simulation.txt", "w")
 
 for algo in algos:
 	# initialise all possible versions into DB
-	versions_all = list(product(features[0], features[1], features[2]))
+	versions = list(product(features[0], features[1], features[2]))
+	counts = [0 for i in versions]
 
 	# testing only the top 4 versions
-	versions = [('grid', 'small', 'dark'), ('grid', 'large', 'light'), ('list', 'small', 'dark'), ('list', 'large', 'dark')]
+	# versions = [('grid', 'small', 'dark'), ('grid', 'large', 'light'), ('list', 'small', 'dark'), ('list', 'large', 'dark')]
 
 	headers = "date,"
 
 	for i, v in enumerate(versions):
 		if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
 			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
-		# headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
+		headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
 		headers += "version" + str(i + 1) + ","
-	headers += "clicks,time,reward"
+	headers += "clicks,time,reward,std_dev"
 	
 	# write all versions to Stats file
 	# "w" is overwriting the current file
@@ -89,6 +95,8 @@ for algo in algos:
 		reward_sum = 0.0
 		avg_clicks = 0.0
 		avg_time = 0.0
+		std_dev = 0.0
+		rewards_arr = [0.0 for i in range(horizon)]
 
 		for j in range(horizon):
 
@@ -97,7 +105,7 @@ for algo in algos:
 			# get preferences tree
 			tree = getTree("UserPreferencesTree.pkl")
 			# set preferences
-			user.buildPreferences(tree, versions_all)
+			user.buildPreferences(tree, versions)
 
 			# Get layout version from Bandit algorithm
 			version = bandit.getVersion()
@@ -135,18 +143,23 @@ for algo in algos:
 			rewards = {"clicks": clicks, "time": time}
 
 			bandit.updateValue(version, rewards)
-			print "reward: ", rewards, rating, (0.75 * clicks + 0.25 * time) / 13.5  
+			r = (0.75 * clicks + 0.25 * time) / 13.5
+			print "reward: ", rewards, rating, r  
 			# rewards[index] = reward
-			reward_sum += (0.75 * clicks + 0.25 * time) / 13.5
+			reward_sum += r
 			avg_clicks += clicks
 			avg_time += time
+			rewards_arr[j] = r
 
 		# calculate average reward for simulation
-		avg_rewards[i] = reward_sum / float(horizon)
-		print i, avg_rewards[i]
+		# avg_rewards[i] = reward_sum / float(horizon)
+		avg_rewards.append(reward_sum / float(horizon))
+		std_dev = np.std(rewards_arr)
+		print i, avg_rewards[-1], std_dev
+		print avg_rewards
 
 		# write to Stats file - considering each horizon iteration to be one day
-		writeStats(stats_file, stats_date, avg_clicks / float(horizon), avg_time / float(horizon), avg_rewards[i])
+		writeStats(stats_file, stats_date, avg_clicks / float(horizon), avg_time / float(horizon), avg_rewards[-1], std_dev)
 
 		# increment date
 		# stats_date += timedelta(days=1)

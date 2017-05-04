@@ -73,7 +73,7 @@ for algo in algos:
 	for i, v in enumerate(versions):
 		if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
 			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
-		headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
+		# headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
 		headers += "version" + str(i + 1) + ","
 	headers += "clicks,time,reward,std_dev"
 	

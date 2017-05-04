@@ -1,4 +1,4 @@
-date,version1,version1,version2,version2,version3,version3,version4,version4,version5,version5,version6,version6,version7,version7,version8version8,clicks,time,reward,std_dev
+date,version1,version2,version3,version4,version5,version6,version7,version8,clicks,time,reward,std_dev
 0,24.0,24.0,23.0,30.0,29.0,18.0,28.0,24.0,3.155,14.15,0.437314814815,0.192286771971
 1,27.0,24.0,30.0,26.0,20.0,21.0,28.0,24.0,3.265,14.565,0.451111111111,0.191432044625
 2,23.0,27.0,21.0,33.0,19.0,19.0,29.0,29.0,3.26,14.68,0.452962962963,0.193443987065

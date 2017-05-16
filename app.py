@@ -11,6 +11,7 @@ import json, os
 from EpsilonGreedy import EpsilonGreedy
 from UCB import UCB
 from IteratingBandit import IteratingBandit
+from operator import itemgetter
 
 # Create app and PyMongo DB
 app = Flask(__name__)
@@ -93,10 +94,11 @@ def dashboard():
 
 @app.route("/getVersions", methods=['GET'])
 def getVersions():
-	no_versions = db.Clicks.find().count()
+	versions = db.Clicks.find()
 	map_versions = []
-	for i in range(1, no_versions + 1):
-		map_versions.append({'title': 'Version ' + str(i), 'thumbnail': 'static/dashboard/images/previews/version' + str(i) + '.png'})
+	for i, v in enumerate(versions):
+		map_versions.append({'title': 'Version ' + str(i + 1), 'percentage': round(v.get("percentage"), 2),'thumbnail': 'static/dashboard/images/previews/version' + str(i+1) + '.png', 'number': i})
+	map_versions = sorted(map_versions, key=itemgetter('percentage'), reverse=True)
 	# print map_versions
 	return jsonify(map_versions)
 

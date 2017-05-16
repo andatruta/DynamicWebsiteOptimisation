@@ -30,6 +30,13 @@ body {
   width: 48px;
   height: 48px;
 }
+#header #logo {
+  position: absolute;
+  padding: 10px;
+}
+#header #logo img {
+  height: 48px;
+}
 #nav-bar {
   top: 70px;
   width: 125px;
@@ -69,7 +76,7 @@ body {
 }
 #nav-bar ul li a:hover,
 #nav-bar ul li .active {
-  color: #f1c40f;
+  color: #26b99a;
 }
 #dashboard-main {
   margin-left: 125px;

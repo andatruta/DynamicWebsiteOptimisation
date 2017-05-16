@@ -21,13 +21,13 @@ def writeStats(filename, date, clicks, time, r, std_dev):
 		file.write(str(date) + ",")
 		versions = db.Clicks.find()
 		for i, v in enumerate(versions):
-			# file.write(str(v.get("session_counts")) + ",") if i != versions.count() - 1 else file.write(str(v.get("session_counts")))
-			file.write(str(v.get("count") - counts[i]) + ",")
-			counts[i] = v.get("count")
-		file.write(str(clicks) + "," + str(time) + "," + str(r) + "," + str(std_dev))
+			file.write(str(v.get("percentage")) + ",") if i != versions.count() - 1 else file.write(str(v.get("percentage")))
+		# 	file.write(str(v.get("count") - counts[i]) + ",")
+		# 	counts[i] = v.get("count")
+		# file.write(str(clicks) + "," + str(time) + "," + str(r) + "," + str(std_dev))
 		file.write("\n")
 
-		print counts	
+		# print counts	
 
 	file.close()
 
@@ -36,8 +36,8 @@ client = MongoClient('localhost:27017')
 db = client.ClickData
 
 # Simulation variables
-horizon = 200
-simulations = 10
+horizon = 10
+simulations = 3
 # avg_rewards =[0.0 for i in range(simulations)]
 avg_rewards = []
 epsilon = [0.1]
@@ -51,11 +51,11 @@ colour_schemes = ["dark", "light"]
 # colour_schemes = ["light"]
 features = [layouts, font_sizes, colour_schemes]
 
-# stats_file = "static/dashboard/data/data.csv"
-stats_file = "static/dashboard/data/ucb.csv"
+stats_file = "static/dashboard/data/data.csv"
+# stats_file = "static/dashboard/data/ucb.csv"
 dt = datetime.now()
-# stats_date = dt.date()
-stats_date = 0
+stats_date = dt.date()
+# stats_date = 0
 
 # open file
 file = open("simulation.txt", "w")
@@ -73,9 +73,9 @@ for algo in algos:
 	for i, v in enumerate(versions):
 		if db.Clicks.find({"$and": [{"layout": v[0]}, {"font_size": v[1]}, {"colour_scheme": v[2]}]}).count() == 0:
 			db.Clicks.insert_one({'layout': v[0], 'colour_scheme': v[2], 'font_size': v[1], 'count': 0, 'value': 0.0, 'clicks': 0, 'time': 0, 'percentage': 0})
-		# headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
-		headers += "version" + str(i + 1) + ","
-	headers += "clicks,time,reward,std_dev"
+		headers += "version" + str(i + 1) if i == len(versions) - 1 else "version" + str(i + 1) + ","
+		# headers += "version" + str(i + 1) + ","
+	# headers += "clicks,time,reward,std_dev"
 	
 	# write all versions to Stats file
 	# "w" is overwriting the current file
@@ -162,16 +162,16 @@ for algo in algos:
 		writeStats(stats_file, stats_date, avg_clicks / float(horizon), avg_time / float(horizon), avg_rewards[-1], std_dev)
 
 		# increment date
-		# stats_date += timedelta(days=1)
-		stats_date += 1
+		stats_date += timedelta(days=1)
+		# stats_date += 1
 
 	# write to Simulation file
-	results = ""
-	for r in avg_rewards:
-		results += str(r)
-		results += " "
-	file.write(results + "\n")
-	print "overall avg reward: ",  float(sum(avg_rewards)) / float(simulations)
+	# results = ""
+	# for r in avg_rewards:
+	# 	results += str(r)
+	# 	results += " "
+	# file.write(results + "\n")
+	# print "overall avg reward: ",  float(sum(avg_rewards)) / float(simulations)
 
 	# clear DB for next epsilon simulation
 	# db.Clicks.drop()

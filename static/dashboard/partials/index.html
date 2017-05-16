@@ -5,8 +5,9 @@
 
 	</div>
 	<div id="versions-list">
+		Version ranking
 		<ul ng-repeat="version in ctrl.versions">
-			<li><span class="version-square" ng-style="{ 'background-color': ctrl.colours[$index]}"></span>{{ version.title }}</li>
+			<li><span class="version-square" ng-style="{ 'background-color': ctrl.colours[ {{ version.number }} ]}"></span>{{ version.title }} - {{ version.percentage }} %</li>
 		</ul>
 	</div>
 </div>
